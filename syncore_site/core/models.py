@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 
 class TimeStamped(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -126,4 +127,64 @@ class VisitorInfo(models.Model):
 
     def __str__(self):
         return f"{self.full_name} <{self.email}>"
+
+
+IMG_VALIDATOR = FileExtensionValidator(["jpg", "jpeg", "png", "webp"])
+
+class FaceCompany(models.Model):
+    image = models.ImageField(upload_to="faces/", validators=[IMG_VALIDATOR])
+    name = models.CharField(max_length=120)
+    position = models.CharField(max_length=120, blank=True)
+    is_founder = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-is_founder", "name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["is_founder"],
+                condition=models.Q(is_founder=True),
+                name="unique_true_founder_only",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.name} ({'Founder' if self.is_founder else self.position})"
+
+
+class AboutUsStatic(models.Model):
+    """
+    Store copy + numbers; use images from DB; headings remain static in template.
+    Only ONE row may be active at a time.
+    """
+    hero_page    = models.ImageField(upload_to="about/", validators=[IMG_VALIDATOR])
+    mission_image= models.ImageField(upload_to="about/", validators=[IMG_VALIDATOR], blank=True, null=True)
+    cta_image    = models.ImageField(upload_to="about/", validators=[IMG_VALIDATOR], blank=True, null=True)
+    above_state_image = models.ImageField(upload_to="above_state_image/", validators=[IMG_VALIDATOR], blank=True, null=True)
+
+    who_we_are_body = models.TextField()
+    mission_body    = models.TextField()
+    vision_line     = models.TextField()
+    cta_body        = models.TextField()
+
+    stat_clients_percent = models.IntegerField(default=92)   
+    stat_revenue_millions = models.IntegerField(default=50)  
+    stat_businesses       = models.IntegerField(default=100) # -> 100+
+    stat_years            = models.IntegerField(default=15)  # -> 15+
+
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active  = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "About Us (Static Integers & Text)"
+        verbose_name_plural = "About Us (Static Integers & Text)"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["is_active"],
+                condition=models.Q(is_active=True),
+                name="about_only_one_active",
+            ),
+        ]
+
+    def __str__(self):
+        return f"AboutUsStatic #{self.pk} (updated {self.updated_at:%Y-%m-%d})"
 

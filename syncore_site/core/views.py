@@ -7,6 +7,8 @@ from django.utils.html import strip_tags
 from .forms import VisitorInfoForm
 from .models import ContactInfo
 from math import ceil
+from .models import FaceCompany, AboutUsStatic
+
 
 def home(request):
     banner = HomeBanner.objects.filter(is_active=True).first()
@@ -44,7 +46,6 @@ def _client_ip(request):
     if xff:
         return xff.split(",")[0].strip()
     return request.META.get("REMOTE_ADDR")
-
 
 
 def contact_form_view(request):
@@ -141,3 +142,8 @@ def contact_form_view(request):
     return render(request, "core/contact_form.html", {"form": form, "contact": contact})
 
 
+def about_page(request):
+    data = AboutUsStatic.objects.filter(is_active=True).first() \
+           or AboutUsStatic.objects.order_by("-updated_at").first()
+    faces = FaceCompany.objects.all() 
+    return render(request, "core/about.html", {"data": data, "faces": faces})

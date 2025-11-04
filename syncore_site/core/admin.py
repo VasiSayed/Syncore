@@ -44,3 +44,35 @@ class TrustedByAdmin(admin.ModelAdmin):
 @admin.register(models.ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ("name", "email")
+
+
+from django.contrib import admin, messages
+from django.db import transaction
+from .models import FaceCompany, AboutUsStatic
+
+@admin.register(FaceCompany)
+class FaceCompanyAdmin(admin.ModelAdmin):
+    list_display = ("name", "position", "is_founder")
+    list_filter = ("is_founder",)
+    search_fields = ("name", "position")
+
+@admin.register(AboutUsStatic)
+class AboutUsStaticAdmin(admin.ModelAdmin):
+    list_display = ("id", "is_active", "updated_at",
+                    "stat_clients_percent", "stat_revenue_millions",
+                    "stat_businesses", "stat_years")
+    list_filter = ("is_active",)
+    actions = ["make_active"]
+
+    @admin.action(description="Make selected record ACTIVE (others become inactive)")
+    def make_active(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, "Select exactly one record.", level=messages.WARNING)
+            return
+        obj = queryset.first()
+        with transaction.atomic():
+            AboutUsStatic.objects.filter(is_active=True).update(is_active=False)
+            obj.is_active = True
+            obj.save(update_fields=["is_active"])
+        self.message_user(request, "Active record updated.", level=messages.SUCCESS)
+

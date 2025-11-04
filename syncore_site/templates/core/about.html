@@ -1,0 +1,360 @@
+{% extends "core/home.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  /* --- Hero (full-bleed, no top gap) --- */
+  .hero-wrap-fw{width:100%; margin:0}
+  .hero-about{
+    position:relative; min-height:82vh; /* taller */
+    border-radius:22px; overflow:hidden
+  }
+  .hero-about .bg{
+    position:absolute; inset:0;
+    background:url("{% if data and data.hero_page %}{{ data.hero_page.url }}{% else %}{% static 'img/about/hero.jpg' %}{% endif %}")
+      center/cover no-repeat;
+  }
+  .hero-about::after{content:""; position:absolute; inset:0; background:rgba(7,16,40,.56)}
+  .hero-title{
+    position:relative; color:#fff; font-family:"Playfair Display",serif; font-weight:700;
+    font-size:clamp(46px,6.5vw,88px); text-shadow:0 4px 28px rgba(0,0,0,.55)
+  }
+
+  /* --- Generic --- */
+  .lead-kicker{font-size:.8rem; padding:.35rem .7rem; border-radius:999px; background:#eaf0ff; color:#2d4dd9; display:inline-flex; gap:.4rem; align-items:center}
+  .lead-kicker i{width:.45rem; height:.45rem; border-radius:999px; background:#2d4dd9; display:inline-block}
+  .title-serif{font-family:"Playfair Display",serif; font-weight:700; color:#1f2a4a}
+  .soft{background:#f4f7fc}
+  .rounded-22{border-radius:22px}
+
+  .mission-card{background:#fff; box-shadow:0 8px 26px rgba(16,32,64,.06); border-radius:22px}
+  .mission-img{width:100%; height:100%; object-fit:cover; border-radius:22px}
+
+  .stat{background:#fff; border-radius:18px; padding:24px; box-shadow:0 8px 26px rgba(16,32,64,.08); text-align:center}
+  .stat h3{font-family:"Playfair Display",serif; font-size:42px; margin:0; color:#1f2a4a}
+
+.chip-btn{
+  display:inline-flex; align-items:center; gap:.75rem;
+  background:#eef3fa; color:#15224a; /* navy text */
+  padding:.9rem 1.2rem .9rem 1.2rem;
+  border-radius:999px; text-decoration:none; font-weight:600;
+  box-shadow:0 6px 18px rgba(16,32,64,.08); transition:.18s ease;
+}
+.chip-btn:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(16,32,64,.12); }
+.chip-btn .chip-icon{
+  width:38px; height:38px; border-radius:999px; background:#101c4a; /* dark navy */
+  display:grid; place-items:center; flex:0 0 auto;
+}
+.chip-btn svg{ width:18px; height:18px; fill:#fff }
+
+.chip-btn--dark{ background:#101c4a; color:#fff }
+.chip-btn--dark .chip-icon{ background:#fff }
+.chip-btn--dark svg{ fill:#101c4a }
+
+.mission-img-wrap{ height:420px }           /* desktop default */
+.mission-img{ width:100%; height:100%; object-fit:cover; border-radius:22px }
+@media (max-width: 992px){ .mission-img-wrap{ height:340px } }
+@media (max-width: 576px){ .mission-img-wrap{ height:260px } }
+
+
+  .face-card{overflow:hidden; border-radius:22px; background:#fff; box-shadow:0 10px 30px rgba(16,32,64,.08)}
+
+  .cta-wrap{position:relative; border-radius:24px; overflow:hidden}
+  .cta-bg{position:absolute; inset:0; background:
+      url("{% if data and data.cta_image %}{{ data.cta_image.url }}{% else %}https://thumbs.dreamstime.com/z/office-discussion-business-corporate-meeting-young-team-male-boss-163221229.jpg{% endif %}")
+      center/cover no-repeat;}
+  .cta-glass{position:relative; max-width:540px; background:rgba(255,255,255,.85); backdrop-filter:blur(10px); border-radius:18px; padding:24px}
+
+  /* --- Typing animations --- */
+  .typewriter{white-space:pre-wrap}
+  .type-caret::after{content:"|"; animation: blink 1s step-end infinite}
+  @keyframes blink { 50%{ opacity:0 } }
+
+  /* --- Above-stats horizontal banner --- */
+  .above-stats-img{width:100%; height:360px; object-fit:cover; border-radius:22px}
+  @media (max-width: 576px){ .above-stats-img{height:220px} }
+</style>
+
+<!-- HERO (full width, no top padding) -->
+<section class="hero-wrap-fw">
+  <div class="hero-about">
+    <div class="bg"></div>
+    <div class="position-relative d-flex align-items-center justify-content-center w-100 h-100">
+      <h1 class="hero-title">About Us</h1>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE ARE -->
+<section class="soft py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="lead-kicker"><i></i> STRATWELL CONSULTING</div>
+        <h2 class="display-5 title-serif mt-3">Who We Are</h2>
+      </div>
+      <div class="col-lg-7">
+        <p class="mb-3">{{ data.who_we_are_body }}</p>
+        <p class="mb-0"><strong>Let’s build the <a href="#" class="text-decoration-none">future</a> — together.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Image -->
+<div class="col-lg-6">
+  <div class="mission-img-wrap">
+    {% if data.mission_image %}
+      <img id="missionImg" src="{{ data.mission_image.url }}" alt="Mission" class="mission-img">
+    {% else %}
+      <img id="missionImg" src="{% static 'img/about/mission.jpg' %}" alt="Mission" class="mission-img">
+    {% endif %}
+  </div>
+</div>
+<!-- TEXT (no typing JS; pure static) -->
+<div class="col-lg-6">
+  <div id="missionTextBox" class="p-3 p-md-4 mission-card">
+    <div class="lead-kicker mb-2"><i></i> OUR MISSION</div>
+    <h2 class="title-serif display-6 mb-3">Driven by <span style="color:#2d4dd9;">Purpose</span></h2>
+    <p class="mb-0">{{ data.mission_body|linebreaksbr }}</p>
+
+    <!-- Button (dark variant optional; screenshot shows light) -->
+    <a href="#" class="chip-btn mt-3">
+      <span>View Our Services</span>
+      <span class="chip-icon">
+        <!-- arrow icon -->
+        <svg viewBox="0 0 24 24"><path d="M13 5h6v6h-2V8.41l-9.29 9.3-1.42-1.42 9.3-9.29H13V5z"/></svg>
+      </span>
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OUR VISION (types on scroll) -->
+<section class="soft py-5">
+  <div class="container">
+    <div class="lead-kicker mb-2"><i></i> OUR VISION</div>
+    <h2 class="display-5 title-serif" style="line-height:1.25;">
+      {{ data.vision_line }}
+    </h2>
+  </div>
+</section>
+
+
+<!-- ABOVE-STATS HORIZONTAL IMAGE -->
+<section class="container my-4">
+  <img
+    src="{% if data.above_state_image %}{{ data.above_state_image.url }}{% else %}{% static 'img/about/above-stats.jpg' %}{% endif %}"
+    class="above-stats-img"
+    alt="Discussion banner">
+</section>
+
+<!-- STATS -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-6 col-lg-3"><div class="stat">
+        <h3>{{ data.stat_clients_percent }}%</h3>
+        <p class="mb-0">Of clients report measurable performance improvements within year.</p>
+      </div></div>
+      <div class="col-6 col-lg-3"><div class="stat">
+        <h3>${{ data.stat_revenue_millions }}M</h3>
+        <p class="mb-0">In revenue growth generated across client portfolios in the last 3 years.</p>
+      </div></div>
+      <div class="col-6 col-lg-3"><div class="stat">
+        <h3>{{ data.stat_businesses }}+</h3>
+        <p class="mb-0">Businesses advised across industries from tech startups to enterprises.</p>
+      </div></div>
+      <div class="col-6 col-lg-3"><div class="stat">
+        <h3>{{ data.stat_years }}+</h3>
+        <p class="mb-0">Years of combined expertise guiding business strategy and execution.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="soft py-5">
+  <div class="container">
+    <div class="text-center mb-4">
+      <div class="lead-kicker mb-2"><i></i> MEET OUR TEAM</div>
+      <h2 class="title-serif display-6">The <em>Faces</em> of Our Company</h2>
+      <p class="text-muted">Get to know the people who make our work meaningful.</p>
+    </div>
+    <div class="row g-4">
+      {% for face in faces %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="face-card p-2 h-100">
+          <img src="{{ face.image.url }}" alt="{{ face.name }}" class="w-100" style="aspect-ratio:1/1; object-fit:cover;">
+          <div class="p-3">
+            <h5 class="mb-1">{{ face.name }}</h5>
+            <p class="text-muted mb-0">{% if face.is_founder %}Founder{% else %}{{ face.position }}{% endif %}</p>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12"><p class="text-center text-muted">Team coming soon.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="container my-5">
+  <div class="cta-wrap">
+    <div class="cta-bg"></div>
+    <div class="position-relative p-4 p-md-5">
+      <div class="cta-glass">
+        <h2 class="title-serif mb-2">Ready to <span style="color:#2d4dd9;">Transform</span><br/>Your Business?</h2>
+        <p class="mb-3">{{ data.cta_body }}</p>
+        <a href="#" class="chip-btn">
+  <span>Get Started Today</span>
+  <span class="chip-icon">
+    <svg viewBox="0 0 24 24"><path d="M13 5h6v6h-2V8.41l-9.29 9.3-1.42-1.42 9.3-9.29H13V5z"/></svg>
+  </span>
+</a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // helper
+  function typeWrite(el, text, speed, onDone){
+    if(!el) return;
+    // if no text, render nothing but don't block layout
+    if(!text || !text.length){
+      el.textContent = "";
+      el.classList.remove('type-caret');
+      onDone && onDone();
+      return;
+    }
+    let i = 0;
+    function step(){
+      if(i <= text.length){
+        el.textContent = text.slice(0, i++);
+        setTimeout(step, speed);
+      }else{
+        el.classList.remove('type-caret');
+        onDone && onDone();
+      }
+    }
+    el.classList.add('type-caret');
+    step();
+  }
+
+  // Mission typing + equal heights (image follows text height)
+  const missionEl   = document.getElementById('missionText');
+  const missionText = {{ data.mission_body|default:"''"|safe|escapejs }};
+  const textBox     = document.getElementById('missionTextBox');
+  const missionImg  = document.getElementById('missionImg');
+
+  const syncHeights = () => {
+    if(textBox && missionImg){
+      missionImg.style.height = textBox.offsetHeight + 'px';
+    }
+  };
+
+  // Observe size changes of the text box (as typing proceeds)
+  if('ResizeObserver' in window && textBox){
+    const ro = new ResizeObserver(syncHeights);
+    ro.observe(textBox);
+  }else{
+    // fallback
+    window.addEventListener('resize', syncHeights);
+  }
+
+  typeWrite(missionEl, missionText, 12, syncHeights); // sync after typing completes
+
+  // Vision typing when parent section is visible
+  const visionSection = document.getElementById('visionSection');
+  const visionTarget  = document.getElementById('visionLine');
+  const visionText    = {{ data.vision_line|default:"''"|safe|escapejs }};
+
+  function renderVision() {
+    // avoid retriggering
+    if (visionTarget.dataset.done) return;
+    visionTarget.dataset.done = "1";
+    typeWrite(visionTarget, visionText, 12);
+  }
+
+  if ('IntersectionObserver' in window && visionSection) {
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) {
+          renderVision();
+          obs.disconnect();
+        }
+      }),
+      { root: null, rootMargin: "0px 0px -20% 0px", threshold: 0 } // trigger as soon as section enters
+    );
+    obs.observe(visionSection);
+  } else {
+    setTimeout(renderVision, 300);
+  }
+
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // helper
+  function typeWrite(el, text, speed, onDone){
+    if(!el) return;
+    if(!text || !text.length){
+      el.textContent = "";
+      el.classList.remove('type-caret');
+      onDone && onDone();
+      return;
+    }
+    let i = 0;
+    function step(){
+      if(i <= text.length){
+        el.textContent = text.slice(0, i++);
+        setTimeout(step, speed);
+      }else{
+        el.classList.remove('type-caret');
+        onDone && onDone();
+      }
+    }
+    el.classList.add('type-caret');
+    step();
+  }
+
+  // Mission typing + equal heights (image follows text height)
+  const missionEl   = document.getElementById('missionText');
+  const missionText = {{ data.mission_body|default:"''"|safe|escapejs }};
+  const textBox     = document.getElementById('missionTextBox');
+  const missionImg  = document.getElementById('missionImg');
+
+  function syncHeights(){
+    if(textBox && missionImg){
+      missionImg.style.height = textBox.offsetHeight + 'px';
+    }
+  }
+
+  if ('ResizeObserver' in window && textBox){
+    const ro = new ResizeObserver(syncHeights);
+    ro.observe(textBox);
+  } else {
+    window.addEventListener('resize', syncHeights);
+  }
+
+  // Start typing; sync once finished and once immediately (for short texts)
+  typeWrite(missionEl, missionText, 12, syncHeights);
+  setTimeout(syncHeights, 50);
+});
+</script>
+
+
+{% endblock %}
