@@ -101,7 +101,7 @@ class TrustedBy(TimeStamped):
 
 
 class ContactInfo(TimeStamped):
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=120,null=True,blank=True)
     video = models.FileField(upload_to="Contact/", help_text="MP4 recommended",blank=True,null=True)
     phone_number=models.BigIntegerField(MinValueValidator(0),null=True,blank=True)
     address=models.CharField(max_length=200,null=True,blank=True)
