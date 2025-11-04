@@ -743,9 +743,11 @@
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-4">
-        <div class="logo-text mb-1"><span>Syn</span><span>Core</span></div>
-        <div class="logo-tagline mb-2">Synchronizing around the Core...</div>
-        <p class="mb-2">Syncore Consulting helps businesses streamline operations, optimize performance, and achieve measurable growth.</p>
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <div class="logo-text mb-1"><span>Syn</span><span>Core</span></div>
+          <div class="logo-tagline mb-2">Synchronizing around the Core...</div>
+          <p class="mb-2">Syncore Consulting helps businesses streamline operations, optimize performance, and achieve measurable growth.</p>
+        </a>
         <a href="mailto:{% if contact %}{{ contact.email }}{% endif %}" class="btn-contact-nav">Contact Us</a>
       </div>
 
