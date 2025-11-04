@@ -5,12 +5,11 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SynCore - Synchronizing around the Core</title>
 
-<!-- Bootstrap -->
+<title>{% block title %}SynCore - Synchronizing around the Core{% endblock %}</title>
+
+{% block page_css %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,69 +18,44 @@
 :root{
   --primary-navy:#1e2a4a; --primary-blue:#2d4dd9; --accent-red:#c42026;
   --light-bg:#f0f2f8; --white:#fff; --text-dark:#1e2a4a; --text-gray:#5a6a7f;
-
   --services-h: 460px;
-  --brand-red:#9c1111;     
-  --brand-green:#0f423a;  
+  --brand-red:#9c1111;
+  --brand-green:#0f423a;
 }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;color:var(--text-dark);overflow-x:hidden;background:var(--light-bg)}
-  h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;color:var(--text-dark);overflow-x:hidden;background:var(--light-bg)}
+h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
 
+/* NAV */
 .navbar{ background:transparent; padding:0; box-shadow:none; }
-
-.glass-nav{
-  position:absolute;            
-  top:14px; left:0; right:0;    
-  z-index:1100;
-  pointer-events:none;          }
-
+.glass-nav{ position:absolute; top:14px; left:0; right:0; z-index:1100; pointer-events:none; }
 .glass-nav-inner{
-  pointer-events:auto;
-  margin:0 auto;
-  width:min(1180px, calc(100% - 48px));
+  pointer-events:auto; margin:0 auto; width:min(1180px, calc(100% - 48px));
   display:flex; align-items:center; justify-content:space-between; gap:24px;
-  padding:16px 22px;
-  border-radius:28px;
-  background:rgba(15, 23, 42, .28);               /* dark glass (no white) */
-  border:1px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(14px) saturate(120%);
-  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  padding:16px 22px; border-radius:28px;
+  background:rgba(15, 23, 42, .28); border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(14px) saturate(120%); -webkit-backdrop-filter:blur(14px) saturate(120%);
   box-shadow:0 10px 40px rgba(0,0,0,.22);
 }
-
-.navbar-brand{
-  background:transparent; border-radius:0; margin:0; padding:2px 0;
-  box-shadow:none; display:flex; align-items:center;
-}
+.navbar-brand{ background:transparent; border-radius:0; margin:0; padding:2px 0; box-shadow:none; display:flex; align-items:center; }
 .brand-stack{display:flex; flex-direction:column; align-items:center; line-height:1;}
 .logo-text{font-size:1.6rem;font-weight:800;letter-spacing:.3px;line-height:1}
-.logo-text span:first-child{color:#e34a4a;}   /* Syn */
-.logo-text span:last-child{color:#1ce1c8;}    /* Core */
+.logo-text span:first-child{color:#e34a4a;}
+.logo-text span:last-child{color:#1ce1c8;}
 .logo-tagline{font-size:.70rem; color:#e5e7eb; margin-top:2px; opacity:.9}
-
 .nav-menu{display:flex;align-items:center;gap:44px;margin:0 auto;}
-.nav-link{
-  color:#fff!important; font-weight:600; letter-spacing:.2px;
-  text-shadow:0 1px 2px rgba(0,0,0,.35);
-  opacity:.95;
-}
+.nav-link{ color:#fff!important; font-weight:600; letter-spacing:.2px; text-shadow:0 1px 2px rgba(0,0,0,.35); opacity:.95; }
 .nav-link:hover{opacity:1}
-
 .btn-contact-pill{
   background:transparent; color:#fff; border:1.6px solid rgba(255,255,255,.85);
-  padding:10px 18px; border-radius:999px; font-weight:700;
-  box-shadow:none;
+  padding:10px 18px; border-radius:999px; font-weight:700; box-shadow:none;
 }
-
-/* toggler */
 .navbar-toggler{border:0; box-shadow:none !important;}
 .navbar-toggler-icon{
   width:1.5rem;height:1.5rem;background-size:100% 100%;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));
 }
-
 @media (max-width: 991.98px){
   .glass-nav-inner{padding:12px 14px}
   .nav-menu{gap:18px;margin:12px 0 0}
@@ -89,366 +63,163 @@
   .btn-contact-pill{width:100%}
 }
 
+/* HERO */
+.hero-wrap{position:relative;margin-top:0}
+.hero-media{position:absolute;inset:0;width:100%;height:100vh;object-fit:cover;z-index:0}
+.hero-section{height:100vh;display:flex;align-items:stretch;position:relative;overflow:hidden}
+.hero-content{position:relative;z-index:2;height:100%;display:flex;align-items:flex-end}
+.hero-row{width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;padding:0 3rem 3rem}
+.hero-title{font-size:5rem;font-weight:400;color:#fff;line-height:1.1;margin:0;text-shadow:0 8px 30px rgba(0,0,0,.45)}
+.hero-cta{background:#fff;color:var(--primary-navy);padding:1.1rem 1.6rem;border-radius:50px;font-weight:600;border:none;display:inline-flex;align-items:center;gap:.8rem;box-shadow:0 8px 25px rgba(0,0,0,.2)}
+.btn-icon{width:34px;height:34px;background:var(--primary-navy);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
 
+/* SHARED */
+.dot-indicator{width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+.dot{width:12px;height:12px;background:var(--primary-blue);border-radius:50%}
+.section-title{font-size:3.2rem;color:var(--primary-navy);margin:2.5rem 0 1.25rem;font-weight:400;text-align:center}
+.section-title-left{text-align:left;margin-top:0;margin-bottom:1.25rem}
 
-  .hero-wrap{position:relative;margin-top:0}
-  .hero-video{position:absolute;inset:0;width:100%;height:100vh;object-fit:cover;z-index:0}
-  .hero-section{height:100vh;display:flex;align-items:stretch;position:relative;overflow:hidden}
-  .hero-content{position:relative;z-index:2;height:100%;display:flex;align-items:flex-end}
-  .hero-row{width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;padding:0 3rem 3rem}
-  .hero-title{font-size:5rem;font-weight:400;color:#fff;line-height:1.1;margin:0;text-shadow:0 8px 30px rgba(0,0,0,.45)}
-  .hero-cta{background:#fff;color:var(--primary-navy);padding:1.1rem 1.6rem;border-radius:50px;font-weight:600;border:none;display:inline-flex;align-items:center;gap:.8rem;box-shadow:0 8px 25px rgba(0,0,0,.2)}
-  .btn-icon{width:34px;height:34px;background:var(--primary-navy);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
-
-  /* SHARED */
-  .dot-indicator{width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-  .dot{width:12px;height:12px;background:var(--primary-blue);border-radius:50%}
-  .section-title{font-size:3.2rem;color:var(--primary-navy);margin:2.5rem 0 1.25rem;font-weight:400;text-align:center}
-  .section-title-left{text-align:left;margin-top:0;margin-bottom:1.25rem}
-/* 
+/* SERVICES (simplified) */
 #services .service-card{
-  flex-direction: column;              
-  justify-content: left;
-  text-align: left;
-  gap: 16px;
-  padding: 2rem 1.6rem;
-  min-height: 220px;                    
+  flex-direction: column; align-items: flex-start; text-align: left;
+  gap: 10px; padding: 1.5rem 1.4rem;
 }
-
 #services .service-icon{
-  width: 108px;
-  height: 108px;
-  border-radius: 22px;
-  margin: 0;                            
+  width: 44px; height: 44px; border-radius: 8px; background: transparent; box-shadow: none;
+  position: static; transform: none; margin: 0;
 }
-#services .service-icon i,
-#services .service-icon svg{
-  font-size: 34px;                       \
-}
+#services .service-icon svg, #services .service-icon i{ font-size: 28px; color:#1f2a56; }
+#services .service-title{ font-family:"Times New Roman", Times, Georgia, serif; font-weight:600; font-size:1.6rem; color:#1f2a56; margin:0; letter-spacing:.2px; }
+#services .service-link{ display:none !important; }
+#services .service-card::after{ content:none !important; }
+#services .service-card:hover{ transform:none; box-shadow:0 8px 28px rgba(0,0,0,.08); }
 
-#services .service-logo{ border-radius: 22px; }
-#services .service-badge{ font-size: 1.2rem; }
+/* STATS */
+.stat-card{background:#fff;padding:1.75rem;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.06)}
+.stat-number{font-size:3rem;font-weight:600;color:var(--primary-navy);letter-spacing:.5px}
+.stat-label{font-size:1rem;color:var(--text-gray)}
 
-#services .service-title{
-  font-size: 2rem;
-  margin: 0;
-  letter-spacing: .2px;
-  
-}
-#services .service-link a{
-  display: inline-block;
-  margin-top: .2rem;
-}
+/* SERVICES layout */
+.stats-services{padding:4rem 0;background:var(--light-bg)}
+.service-card{background:#fff;border-radius:18px;padding:1.7rem;box-shadow:0 8px 30px rgba(0,0,0,.06);display:flex;gap:16px;align-items:flex-start;min-height:90px}
+.service-icon{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,#e8e8e8 0%,#f5f5f5 100%);display:flex;align-items:center;justify-content:center;flex:0 0 54px}
+.service-title{font-size:1.1rem;margin:0}
+.service-link a{font-size:.95rem}
+.right-side-image{width:100%;height:300px;border-radius:28px;background-size:cover;background-position:center;box-shadow:0 16px 48px rgba(0,0,0,.12)}
 
-#services .service-card:hover{
-  transform: translateY(-3px);
-}
+/* RESULTS vertical slider */
+.vslider { position: relative; height: 75vh; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.15);background:#0b1224; }
+.vslide { position: absolute; inset: 0; transform: translateY(100%); opacity: 0; transition: transform .6s ease, opacity .6s ease; }
+.vslide.active { transform: translateY(0); opacity: 1; }
+.vslide.exit-up   { transform: translateY(-100%); opacity: 0; }
+.vslide.exit-down { transform: translateY(100%);  opacity: 0; }
+.vslide.from-top  { transform: translateY(-100%); }
+.vslide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.65); }
+.vcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 2.5rem; color:#fff;background: linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 85%); }
+.vcaption h3{ font-size:2rem; margin:0 0 .5rem; }
 
-@media (max-width: 991.98px){
-  #services .service-card{ min-height: 200px; padding: 1.6rem 1.2rem; }
-  #services .service-icon{ width: 92px; height: 92px; border-radius: 18px; }
-  #services .service-title{ font-size: 1.2rem; }
-} */
+/* ABOUT sticky stack */
+.about-section{padding:5rem 0}
+.about-title{font-size:3rem;text-align:left;margin-bottom:2rem}
+.about-grid{align-items:start}
+.about-image-sticky{position:sticky;top:100px}
+@media (max-width:991.98px){ .about-image-sticky{position:static} }
+.about-image{width:100%;height:600px;border-radius:30px;background-size:cover;background-position:center;box-shadow:0 12px 40px rgba(0,0,0,.12)}
+.stack-steps{counter-reset:step}
+.stack-steps .step-card{position:sticky; top:110px; margin:0; padding:1.75rem 2rem;background:#fff; border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,.10)}
+.stack-steps .step-card + .step-card{ margin-top:60px; }
+.stack-steps .step-card::after{counter-increment:step; content:counter(step,decimal-leading-zero); position:absolute; top:.8rem; right:1rem; font-family:'Playfair Display',serif;font-size:3rem; color:var(--primary-blue); opacity:.25;}
+.step-head{ display:flex; align-items:center; gap:12px; margin-bottom:.5rem;}
+.step-icon{ width:56px; height:56px; border-radius:14px; background:rgba(45,77,217,.08); display:flex; align-items:center; justify-content:center; flex:0 0 56px; }
+.step-title{ margin:0; font-size:1.6rem; color:var(--primary-navy); }
+.step-body{ color:var(--text-gray); }
+@media (max-width:991.98px){ .stack-steps .step-card + .step-card{ margin-top:1rem; } }
 
-
-/* --- Our Services: simple, no gimmicks --- */
-#services .service-card{
-  flex-direction: column;          /* icon first line, title next line */
-  align-items: flex-start;         /* left align */
-  text-align: left;
-  gap: 10px;
-  padding: 1.5rem 1.4rem;
-}
-
-/* plain icon on first line (no gradients/frames) */
-#services .service-icon{
-  width: 44px; height: 44px;
-  border-radius: 8px;              /* or 0 if you want a square */
-  background: transparent;         /* keep it clean */
-  box-shadow: none;
-  position: static;                /* no absolute tricks */
-  transform: none;
-  margin: 0;
-}
-#services .service-icon svg,
-#services .service-icon i{
-  font-size: 28px;                 /* adjust if needed */
-  color: #1f2a56;                  
-}
-
-#services .service-title{
-  font-family: "Times New Roman", Times, Georgia, serif;
-  font-weight: 600;
-  font-size: 1.6rem;
-  color: #1f2a56;
-  margin: 0;
-  letter-spacing: .2px;
-}
-
-#services .service-link{ display: none !important; }
-#services .service-card::after{ content: none !important; }
-
-#services .service-card:hover{
-  transform: none;
-  box-shadow: 0 8px 28px rgba(0,0,0,.08);
-}
-
-
-  .stat-card{background:#fff;padding:1.75rem;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.06)}
-  .stat-number{font-size:3rem;font-weight:600;color:var(--primary-navy);letter-spacing:.5px}
-  .stat-label{font-size:1rem;color:var(--text-gray)}
-
-  .stats-services{padding:4rem 0;background:var(--light-bg)}
-  .service-card{background:#fff;border-radius:18px;padding:1.7rem;box-shadow:0 8px 30px rgba(0,0,0,.06);display:flex;gap:16px;align-items:flex-start;min-height:90px}
-  .service-icon{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,#e8e8e8 0%,#f5f5f5 100%);display:flex;align-items:center;justify-content:center;flex:0 0 54px}
-  .service-title{font-size:1.1rem;margin:0}
-  .service-link a{font-size:.95rem}
-  .right-side-image{width:100%;height:300px;border-radius:28px;background-size:cover;background-position:center;box-shadow:0 16px 48px rgba(0,0,0,.12)}
-
-  /* RESULTS (vertical slider) */
-  .vslider { position: relative; height: 75vh; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.15);background:#0b1224; }
-  .vslide { position: absolute; inset: 0; transform: translateY(100%); opacity: 0; transition: transform .6s ease, opacity .6s ease; }
-  .vslide.active { transform: translateY(0); opacity: 1; }
-  .vslide.exit-up   { transform: translateY(-100%); opacity: 0; }
-  .vslide.exit-down { transform: translateY(100%);  opacity: 0; }
-  .vslide.from-top  { transform: translateY(-100%); }
-  .vslide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.65); }
-  .vcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 2.5rem; color:#fff;background: linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 85%); }
-  .vcaption h3{ font-size:2rem; margin:0 0 .5rem; }
-
-  /* ABOUT sticky stack */
-  .about-section{padding:5rem 0}
-  .about-title{font-size:3rem;text-align:left;margin-bottom:2rem}
-  .about-grid{align-items:start}
-  .about-left{}
-  .about-image-sticky{position:sticky;top:100px}
-  @media (max-width:991.98px){ .about-image-sticky{position:static} }
-  .about-image{width:100%;height:600px;border-radius:30px;background-size:cover;background-position:center;box-shadow:0 12px 40px rgba(0,0,0,.12)}
-
-  .stack-steps{counter-reset:step}
-  .stack-steps .step-card{position:sticky; top:110px; margin:0; padding:1.75rem 2rem;background:#fff; border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,.10)}
-  .stack-steps .step-card + .step-card{ margin-top:60px; }
-  .stack-steps .step-card::after{counter-increment:step; content:counter(step,decimal-leading-zero); position:absolute; top:.8rem; right:1rem; font-family:'Playfair Display',serif;font-size:3rem; color:var(--primary-blue); opacity:.25;}
-  .step-head{ display:flex; align-items:center; gap:12px; margin-bottom:.5rem;}
-  .step-icon{ width:56px; height:56px; border-radius:14px; background:rgba(45,77,217,.08); display:flex; align-items:center; justify-content:center; flex:0 0 56px; }
-  .step-title{ margin:0; font-size:1.6rem; color:var(--primary-navy); }
-  .step-body{ color:var(--text-gray); }
-  @media (max-width:991.98px){ .stack-steps .step-card + .step-card{ margin-top:1rem; } }
-
-  /* TEAM / LOGOS / FOOTER */
-  .team-section{padding:5rem 0}
-  .team-content-card{background:#fff;padding:3rem;border-radius:30px;box-shadow:0 15px 50px rgba(0,0,0,.08)}
-  .logos-section{padding:4rem 0}
-  .logo-card{background:#fff;padding:2rem;border-radius:20px;box-shadow:0 6px 25px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;height:120px}
-
-  /* extra left/right breathing room for the logos section */
-.logos-section .container{
-  padding-inline: 32px;                 /* wider than default container padding */
-}
-
-@media (max-width: 991.98px){
-  .logos-section .container{
-    padding-inline: 20px;               /* still cushioned on mobile */
-  }
-}
-
-/* give each logo card a little more internal air and a softer radius */
-.logo-card{
-  padding: 2.25rem;                      /* was 2rem */
-  border-radius: 22px;                   /* a touch rounder */
-}
-
-.logo-card img{
-  display:block;
-  max-width: 100%;
-  max-height: 66px;                     
-  margin: 0 auto;                       
-  object-fit: contain;
-}
-
+/* TEAM / LOGOS / FOOTER */
+.team-section{padding:5rem 0}
+.team-content-card{background:#fff;padding:3rem;border-radius:30px;box-shadow:0 15px 50px rgba(0,0,0,.08)}
+.logos-section{padding:4rem 0}
+.logo-card{background:#fff;padding:2.25rem;border-radius:22px;box-shadow:0 6px 25px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;height:120px}
+.logos-section .container{ padding-inline:32px; }
+@media (max-width: 991.98px){ .logos-section .container{ padding-inline:20px; } }
+.logo-card img{ display:block; max-width:100%; max-height:66px; margin:0 auto; object-fit:contain; }
 
 .footer{
-  background:#0f1a32;
-  color:#fff;
-  padding:6rem 0 3rem;           
+  background:#0f1a32; color:#fff; padding:6rem 0 2.25rem;
 }
-.footer h5{
-  font-family:'Playfair Display',serif;
-  font-size:2.25rem;              
-  margin-bottom:1.25rem;
-}
-.footer .footer-row{
-  row-gap:3rem;                   
-  column-gap:2rem;                
-}
-.footer p.lead-copy{
-  max-width:560px;                
-  line-height:1.8;                
-  font-size:1.05rem;
-}
-.footer .btn-contact-nav{ margin-top:1.25rem; }
-.footer ul{ margin:0; padding:0; list-style:none; }
-.footer ul li{ margin-bottom:.9rem; }  
-.footer a.text-white-50:hover{ color:#fff!important; }
-
-.footer-legal{
-  margin-top:3rem;
-  padding-top:1.25rem;
-  border-top:1px solid rgba(255,255,255,.08);
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:space-between;
-  gap:1rem;
-  color:rgba(255,255,255,.7);
-  font-size:.95rem;
-}
-
-  .hero-media{position:absolute;inset:0;width:100%;height:100vh;object-fit:cover;z-index:0}
-
-
-  /* === Marquee container (keeps logos inside the div) === */
-.logos-marquee{
-  position: relative;
-  overflow: hidden;
-  height: 120px;                 /* matches your .logo-card height */
-  border-radius: 20px;           /* optional to match your cards */
-  /* nice edge-fade so items don't hard-cut at container edges */
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-}
-
-.marquee-track{
-  display: flex;
-  align-items: center;
-  gap: 24px;                     /* space between logo-cards */
-  width: max-content;            /* allow content to be as wide as needed */
-}
-
-
-/* === 2-row marquee container === */
-.logos-marquee{
-  display: grid;
-  gap: 18px;
-}
-
-/* Each row keeps content inside (no overflow outside the div) */
-.logos-marquee-row{
-  position: relative;
-  overflow: hidden;
-  height: 120px;
-  border-radius: 20px;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-}
-
-/* The moving strip */
-.marquee-track{
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  width: max-content;
-  will-change: transform;
-  /* Duration is a CSS var so you can tweak per row without JS */
-  --dur: 30s;
-}
-
-/* Directions + animation (no conflict now) */
-.marquee-track.rtl { animation: marquee-rtl var(--dur) linear infinite; }
-.marquee-track.ltr { animation: marquee-ltr var(--dur) linear infinite; }
-
-/* Pause on hover */
-.logos-marquee-row:hover .marquee-track{ animation-play-state: paused; }
-
-/* Reduced motion: stop */
-@media (prefers-reduced-motion: reduce){
-  .marquee-track{ animation: none !important; }
-}
-
-/* Seamless loops (we duplicate items once in the HTML) */
-@keyframes marquee-rtl { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
-@keyframes marquee-ltr { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-
-
-
-.logos-marquee:hover .marquee-track{
-  animation-play-state: paused;
-}
-
-/* Prefer-reduced-motion: stop animation */
-@media (prefers-reduced-motion: reduce){
-  .marquee-track{ animation: none !important; }
-}
-
-/* The actual scrolling */
-@keyframes marquee-scroll{
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); } /* we’ll duplicate items to make a seamless loop */
-}
-
-/* ===== 2-row marquee ===== */
-.logos-marquee{
-  display: grid;
-  gap: 18px;                      /* space between the two rows */
-}
-
-.logos-marquee-row{
-  position: relative;
-  overflow: hidden;
-  height: 120px;                  /* matches your .logo-card height */
-  border-radius: 20px;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-}
-
-.marquee-track{
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  width: max-content;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-/* directions */
-.marquee-track.rtl { animation-name: marquee-rtl; }
-.marquee-track.ltr { animation-name: marquee-ltr; }
-
-/* pause on hover */
-.logos-marquee-row:hover .marquee-track{ animation-play-state: paused; }
-
-/* reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .marquee-track{ animation: none !important; }
-}
-
-/* keyframes for seamless loop (we duplicate items once) */
-@keyframes marquee-rtl { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes marquee-ltr { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-
-
-@media (max-width: 991.98px){
-  .footer{ padding:4.5rem 0 2.5rem; }
-  .footer h5{ font-size:1.9rem; }
-}
-
-.dot-indicator{ display:none !important; }
-
-  @media (max-width:992px){
-    .hero-title{font-size:2.6rem}
-    .hero-row{flex-direction:column;align-items:flex-start;padding:0 1.25rem 2rem}
-    .about-image{height:360px}
-    .vslider{height:60vh}
+/* Footer grid to prevent column overlap */
+@media (min-width: 992px){
+  .footer .row.footer-row{
+    display: grid !important;
+    grid-template-columns: 5fr 3fr 2fr 2fr; /* Brand / Menu / Socials / Contact */
+    align-items: start;
+    column-gap: 48px;
   }
+  .footer .row.footer-row > [class*="col-"]{
+    width: auto !important;
+    max-width: none !important;
+    flex: none !important;  /* stop Bootstrap from squeezing */
+  }
+}
+
+/* Brand block sizing */
+.footer .brand-box{ max-width: 520px; }
+.footer .navbar-brand{ display:block; padding:0; }
+.footer .logo-text{ font-size:2.2rem; line-height:1; font-weight:800; display:block; }
+.footer .logo-tagline{ font-size:.8rem; opacity:.85; margin-top:.35rem; }
+.footer .lead-copy{ margin:1.25rem 0 1.5rem; font-size:1.05rem; line-height:1.9; color:#d3d9e6; }
+
+/* CTA pill */
+.footer .btn-contact-nav{
+  display:inline-block; background:#e7ecf6; color:#0f1a32!important;
+  padding:.9rem 1.25rem; border-radius:999px; font-weight:700; text-decoration:none;
+  box-shadow:0 6px 16px rgba(0,0,0,.15);
+}
+
+/* Headings + links */
+.footer h5{ font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:600; margin:0 0 1.1rem; }
+@media (max-width:991.98px){ .footer h5{ font-size:2rem; } }
+.footer a.text-white-50{ color:#bcc7dd!important; text-decoration:none; font-size:1.1rem; }
+.footer a.text-white-50:hover{ color:#fff!important; }
+.footer .contact-line, .footer .col-lg-3 .mb-2{ color:#dfe6f5; font-size:1.15rem; }
+
+.logos-marquee{ display:grid; gap:18px; }
+.logos-marquee-row{ position:relative; overflow:hidden; height:120px; border-radius:20px;
+  -webkit-mask-image:linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+          mask-image:linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+}
+.marquee-track{ display:flex; align-items:center; gap:24px; width:max-content; will-change:transform; --dur:30s; }
+.marquee-track.rtl{ animation:marquee-rtl var(--dur) linear infinite; }
+.marquee-track.ltr{ animation:marquee-ltr var(--dur) linear infinite; }
+.logos-marquee-row:hover .marquee-track{ animation-play-state:paused; }
+@media (prefers-reduced-motion:reduce){ .marquee-track{ animation:none !important; } }
+@keyframes marquee-rtl { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes marquee-ltr { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+
+/* Misc */
+.dot-indicator{ display:none !important; }
+@media (max-width:992px){
+  .hero-title{font-size:2.6rem}
+  .hero-row{flex-direction:column;align-items:flex-start;padding:0 1.25rem 2rem}
+  .about-image{height:360px}
+  .vslider{height:60vh}
+}
 </style>
+{% endblock %}
+
 </head>
 <body>
+
+{% block components %}
+{# place modals/partials you want globally available #}
+{% endblock %}
+
 
 <div class="glass-nav">
   <nav class="navbar navbar-expand-lg">
     <div class="glass-nav-inner container-fluid px-3">
 
-      <a class="navbar-brand" href="#home">
+      <a class="navbar-brand" href="{% url 'home' %}">
         <div class="brand-stack">
           <div class="logo-text"><span>Syn</span><span>Core</span></div>
           <div class="logo-tagline">Synchronizing around the Core...</div>
@@ -463,7 +234,7 @@
 
       <div class="collapse navbar-collapse justify-content-center" id="navbarNavGlass">
         <ul class="navbar-nav nav-menu">
-          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
           <li class="nav-item"><a class="nav-link" href="#results">Testimonials</a></li>
           <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
@@ -471,10 +242,8 @@
         </ul>
 
         <div class="ms-lg-4 mt-3 mt-lg-0">
-          <a href="{% url 'contact' %}" style="text-decoration: none; ">
-            <button class="btn-contact-pill">
-              Contact Us
-            </button>
+          <a href="{% url 'contact' %}" style="text-decoration: none;">
+            <button class="btn-contact-pill">Contact Us</button>
           </a>
         </div>
       </div>
@@ -483,6 +252,7 @@
   </nav>
 </div>
 
+{% block content %}
 
 <section class="hero-section hero-wrap" id="home">
   {% if banner and banner.video %}
@@ -493,7 +263,6 @@
         <source src="{{ banner.video.url }}" type="video/mp4">
       </video>
     {% else %}
-      <!-- Optional: fallback as image if it's some other format -->
       <img src="{{ banner.video.url }}" alt="Hero" class="hero-media" loading="eager" decoding="async" />
     {% endif %}
   {% endif %}
@@ -506,10 +275,8 @@
   </div>
 </section>
 
-
 <section id="metrics" class="py-5" style="background:var(--light-bg)">
   <div class="container">
-    <div class="dot-indicator mx-auto"><div class="dot"></div></div>
     <div class="row g-4">
       {% for m in metrics %}
         <div class="col-lg-4">
@@ -562,7 +329,6 @@
 
 <section class="industries-section" id="industries">
   <div class="container">
-    <div class="dot-indicator"><div class="dot"></div></div>
     <h2 class="section-title">Proven <em>Results</em> Across Industries</h2>
   </div>
 </section>
@@ -594,7 +360,6 @@
 
 <section class="about-section" id="about">
   <div class="container">
-    <div class="dot-indicator"><div class="dot"></div></div>
     <h2 class="about-title">
       At Syncore Consulting, we believe that strategy<br/>
       should do more than sit on paper — it should drive<br/>
@@ -602,7 +367,6 @@
     </h2>
 
     <div class="row g-4 about-grid">
-      <!-- Left: image stays pinned -->
       <div class="col-lg-6 about-left">
         <div class="about-image-sticky">
           <div class="about-image"
@@ -610,7 +374,6 @@
         </div>
       </div>
 
-      <!-- Right: sticky stack steps -->
       <div class="col-lg-6 stack-steps">
         <div class="step-card" style="z-index:40">
           <div class="step-head">
@@ -679,7 +442,6 @@
 <!-- TEAM -->
 <section class="team-section">
   <div class="container">
-    <div class="dot-indicator"><div class="dot"></div></div>
     <div class="row align-items-center g-4">
       <div class="col-lg-6">
         <div class="team-content-card">
@@ -698,63 +460,64 @@
 <!-- TRUSTED BY -->
 <section class="logos-section" id="trustedby">
   <div class="container">
-    <div class="dot-indicator"><div class="dot"></div></div>
     <h2 class="section-title" style="margin-top:1rem;">Trusted By</h2>
 
     <div class="logos-marquee">
+      <div class="logos-marquee-row">
+        <div class="marquee-track rtl" id="logosTrackTop" style="--dur: 28s">
+          {% for l in logos_top %}
+            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}"/></div>
+          {% endfor %}
+          {% for l in logos_top %}
+            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo clone {{ forloop.counter }}"/></div>
+          {% endfor %}
+        </div>
+      </div>
 
-<div class="logos-marquee-row">
-  <div class="marquee-track rtl" id="logosTrackTop" style="--dur: 28s">
-    {% for l in logos_top %}
-      <div class="logo-card">
-        <img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}" />
+      <div class="logos-marquee-row">
+        <div class="marquee-track ltr" id="logosTrackBottom" style="--dur: 34s">
+          {% for l in logos_bottom %}
+            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}"/></div>
+          {% endfor %}
+          {% for l in logos_bottom %}
+            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo clone {{ forloop.counter }}"/></div>
+          {% endfor %}
+        </div>
       </div>
-    {% endfor %}
-    {% for l in logos_top %}
-      <div class="logo-card">
-        <img src="{{ l.logo.url }}" alt="Logo clone {{ forloop.counter }}" />
-      </div>
-    {% endfor %}
-  </div>
-</div>
-
-<div class="logos-marquee-row">
-  <div class="marquee-track ltr" id="logosTrackBottom" style="--dur: 34s">
-    {% for l in logos_bottom %}
-      <div class="logo-card">
-        <img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}" />
-      </div>
-    {% endfor %}
-    {% for l in logos_bottom %}
-      <div class="logo-card">
-        <img src="{{ l.logo.url }}" alt="Logo clone {{ forloop.counter }}" />
-      </div>
-    {% endfor %}
-  </div>
-</div>
-
     </div>
   </div>
 </section>
 
 
+{% endblock %}
 <!-- FOOTER -->
 <footer class="footer" id="contact">
   <div class="container">
     <div class="row g-4">
-      <div class="col-lg-4">
-        <a class="navbar-brand" href="{% url 'home' %}">
-          <div class="logo-text mb-1"><span>Syn</span><span>Core</span></div>
-          <div class="logo-tagline mb-2">Synchronizing around the Core...</div>
-          <p class="mb-2">Syncore Consulting helps businesses streamline operations, optimize performance, and achieve measurable growth.</p>
-        </a>
-        <a href="mailto:{% if contact %}{{ contact.email }}{% endif %}" class="btn-contact-nav">Contact Us</a>
-      </div>
+<!-- LEFT column (brand) -->
+<div class="col-lg-4">
+  <div class="brand-box">
+    <a class="navbar-brand d-inline-block mb-2" href="{% url 'home' %}">
+      <div class="logo-text"><span>Syn</span><span>Core</span></div>
+      <div class="logo-tagline">Synchronizing around the Core...</div>
+    </a>
+
+    <p class="lead-copy">
+      Syncore Consulting helps businesses streamline operations, optimize performance,
+      and achieve measurable growth.
+    </p>
+
+    <a href="mailto:{% if contact %}{{ contact.email }}{% endif %}" class="btn-contact-nav">
+      Contact Us
+    </a>
+  </div>
+</div>
+
 
       <div class="col-lg-2 col-md-6">
         <h5 class="mb-3">Menu</h5>
         <ul class="list-unstyled">
-          <li><a class="text-white-50 text-decoration-none" href="#home">Home</a></li>
+          <li><a class="text-white-50 text-decoration-none" href="{% url 'home' %}">Home</a></li>
           <li><a class="text-white-50 text-decoration-none" href="#about">About Us</a></li>
           <li><a class="text-white-50 text-decoration-none" href="#results">Proven Results</a></li>
           <li><a class="text-white-50 text-decoration-none" href="#services">Services</a></li>
@@ -785,118 +548,95 @@
   </div>
 </footer>
 
-<!-- JS -->
+
+{% block page_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      const href=a.getAttribute('href'); if(!href||href==="#") return;
-      const target=document.querySelector(href); if(!target) return;
-      e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'});
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const href=a.getAttribute('href'); if(!href||href==="#") return;
+    const target=document.querySelector(href); if(!target) return;
+    e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// Elevate navbar on scroll
+window.addEventListener('scroll',()=>{
+  const bar=document.querySelector('.navbar');
+  bar.style.boxShadow = window.scrollY>50 ? '0 4px 30px rgba(0,0,0,.1)' : '0 2px 20px rgba(0,0,0,.05)';
+});
+
+// Metrics count-up (+ prefix)
+(function () {
+  const els=[...document.querySelectorAll('.stat-number')];
+  if(!els.length) return;
+
+  const animate=(el)=>{
+    const end=Number(el.dataset.target||0);
+    const suffix=(el.dataset.suffix||'').trim();
+    const start=0; const dur=1200; const t0=performance.now();
+    function tick(now){
+      const p=Math.min((now-t0)/dur,1);
+      const val=Math.floor(start + (end-start)*p);
+      el.textContent = `+${val}${suffix}`;
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  };
+
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); }
     });
-  });
+  },{threshold:0.3});
 
-  // Elevate navbar on scroll
-  window.addEventListener('scroll',()=>{
-    const bar=document.querySelector('.navbar');
-    bar.style.boxShadow = window.scrollY>50 ? '0 4px 30px rgba(0,0,0,.1)' : '0 2px 20px rgba(0,0,0,.05)';
-  });
+  els.forEach(el=>io.observe(el));
+})();
+</script>
 
-  // ===== Metrics count-up (+ prefix) =====
-  (function () {
-    const els=[...document.querySelectorAll('.stat-number')];
-    if(!els.length) return;
-
-    const animate=(el)=>{
-      const end=Number(el.dataset.target||0);
-      const suffix=(el.dataset.suffix||'').trim(); // e.g., Cr, %
-      const start=0;
-      const dur=1200; // ms
-      const t0=performance.now();
-
-      function tick(now){
-        const p=Math.min((now-t0)/dur,1);
-        const val=Math.floor(start + (end-start)*p);
-        el.textContent = `+${val}${suffix}`;
-        if(p<1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    };
-
-    const io=new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          animate(e.target);
-          io.unobserve(e.target);
-        }
-      });
-    },{threshold:0.3});
-
-    els.forEach(el=>io.observe(el));
-  })();
-
+<script>
+// Results vertical slider
 (function() {
   const slider = document.getElementById('resultsVSlider');
   if (!slider) return;
   const slides = Array.from(slider.querySelectorAll('.vslide'));
   let i = 0, busy = false, timer = null;
 
-  function resetClasses() {
-    slides.forEach(s => s.classList.remove('active','exit-up','exit-down','from-top'));
-  }
-
-  function setZ(current, incoming) {
+  function resetClasses(){ slides.forEach(s => s.classList.remove('active','exit-up','exit-down','from-top')); }
+  function setZ(current, incoming){
     slides.forEach(s => s.style.zIndex = 0);
     if (current)  current.style.zIndex  = 2;
     if (incoming) incoming.style.zIndex = 3;
   }
 
-  function go(to, dir) {
-    if (busy || to === i) return;
-    busy = true;
-
-    const current  = slides[i];
-    const incoming = slides[to];
-
-    resetClasses();
-    setZ(current, incoming);
-
-    // prepare incoming origin based on direction
-    if (dir === 'down') {          // going to previous
-      incoming.classList.add('from-top');   // start above
-    } else {                        // 'up' (next)
-      // default incoming starts below via base CSS transform
-    }
-
-    // force reflow so the starting class takes effect
+  function go(to, dir){
+    if (busy || to === i) return; busy = true;
+    const current = slides[i]; const incoming = slides[to];
+    resetClasses(); setZ(current, incoming);
+    if (dir === 'down'){ incoming.classList.add('from-top'); }
     void incoming.offsetHeight;
-
-    // animate
     current.classList.add(dir === 'up' ? 'exit-up' : 'exit-down');
     incoming.classList.add('active');
-
-    setTimeout(() => { i = to; busy = false; }, 650);
+    setTimeout(()=>{ i = to; busy = false; }, 650);
   }
 
-  function next(){ go((i+1) % slides.length, 'up'); }
-  function prev(){ go((i-1+slides.length) % slides.length, 'down'); }
+  function next(){ go((i+1)%slides.length, 'up'); }
+  function prev(){ go((i-1+slides.length)%slides.length, 'down'); }
 
-  // auto play
   function start(){ timer = setInterval(next, 5000); }
   function stop(){ if (timer) clearInterval(timer); }
   start();
   slider.addEventListener('mouseenter', stop);
   slider.addEventListener('mouseleave', start);
 
-  // wheel (down = next, up = prev feels natural)
   slider.addEventListener('wheel', (e) => {
     e.preventDefault();
     if (Math.abs(e.deltaY) < 4) return;
     e.deltaY > 0 ? next() : prev();
   }, { passive: false });
 
-  // touch swipe
   let touchY = null;
   slider.addEventListener('touchstart', e => touchY = e.touches[0].clientY, {passive:true});
   slider.addEventListener('touchend', e => {
@@ -906,7 +646,6 @@
     touchY = null;
   });
 
-  // optional: mouse “nudges”
   let lastY = null;
   slider.addEventListener('mousemove', (e) => {
     if (lastY !== null) {
@@ -917,40 +656,25 @@
     lastY = e.clientY;
   });
 })();
-
-  
-  function syncAboutHeights() {
-    const leftCol = document.querySelector('.about-left');
-    const steps = document.querySelector('.stack-steps');
-    if (!leftCol || !steps) return;
-    leftCol.style.minHeight = steps.scrollHeight + 'px';
-  }
-  window.addEventListener('load', syncAboutHeights);
-  window.addEventListener('resize', () => { clearTimeout(window.__aboutSync); window.__aboutSync = setTimeout(syncAboutHeights, 150); });
-</script>
-<script>
-(function tuneMarqueeSpeed(){
-  const track = document.getElementById('logosTrack');
-  if(!track) return;
-
-  // Count unique items (we duplicated once, so half the children are unique)
-  const total = track.children.length;
-  const unique = Math.max(1, Math.floor(total / 2));
-
-  // 0.9s per logo feels nice; clamp between 18s and 45s
-  const seconds = Math.min(45, Math.max(18, unique * 0.9));
-  track.style.animationDuration = seconds + 's';
-})();
 </script>
 
 <script>
+// Sync heights for sticky image/steps
+function syncAboutHeights() {
+  const leftCol = document.querySelector('.about-left');
+  const steps = document.querySelector('.stack-steps');
+  if (!leftCol || !steps) return;
+  leftCol.style.minHeight = steps.scrollHeight + 'px';
+}
+window.addEventListener('load', syncAboutHeights);
+window.addEventListener('resize', () => { clearTimeout(window.__aboutSync); window.__aboutSync = setTimeout(syncAboutHeights, 150); });
+
+// Marquee tuning (two rows)
 (function tuneRow(trackId){
   const track = document.getElementById(trackId);
   if(!track) return;
   const total = track.children.length;
   const unique = Math.max(1, Math.floor(total / 2));
-
-  // ~0.9s per logo, clamp to sensible bounds
   const seconds = Math.min(45, Math.max(18, unique * 0.9));
   track.style.animationDuration = seconds + 's';
 })('logosTrackTop');
@@ -960,14 +684,11 @@
   if(!track) return;
   const total = track.children.length;
   const unique = Math.max(1, Math.floor(total / 2));
-
-  // offset a bit so the rows don't look identical
   const seconds = Math.min(48, Math.max(20, unique * 1.0));
   track.style.animationDuration = seconds + 's';
 })('logosTrackBottom');
 </script>
-
-
+{% endblock %}
 
 </body>
 </html>
