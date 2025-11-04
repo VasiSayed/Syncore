@@ -28,17 +28,14 @@
   body{font-family:'Inter',sans-serif;color:var(--text-dark);overflow-x:hidden;background:var(--light-bg)}
   h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
 
-/* ===== NAVBAR (glassy, over video) ===== */
 .navbar{ background:transparent; padding:0; box-shadow:none; }
 
 .glass-nav{
-  position:absolute;            /* sits over the hero/video */
-  top:14px; left:0; right:0;    /* full width */
+  position:absolute;            
+  top:14px; left:0; right:0;    
   z-index:1100;
-  pointer-events:none;          /* so the pill handles clicks only */
-}
+  pointer-events:none;          }
 
-/* the glass pill */
 .glass-nav-inner{
   pointer-events:auto;
   margin:0 auto;
@@ -53,7 +50,6 @@
   box-shadow:0 10px 40px rgba(0,0,0,.22);
 }
 
-/* logo stack – no white chip */
 .navbar-brand{
   background:transparent; border-radius:0; margin:0; padding:2px 0;
   box-shadow:none; display:flex; align-items:center;
@@ -64,7 +60,6 @@
 .logo-text span:last-child{color:#1ce1c8;}    /* Core */
 .logo-tagline{font-size:.70rem; color:#e5e7eb; margin-top:2px; opacity:.9}
 
-/* center links */
 .nav-menu{display:flex;align-items:center;gap:44px;margin:0 auto;}
 .nav-link{
   color:#fff!important; font-weight:600; letter-spacing:.2px;
@@ -449,7 +444,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <div class="glass-nav">
   <nav class="navbar navbar-expand-lg">
     <div class="glass-nav-inner container-fluid px-3">
@@ -778,7 +772,7 @@
       <div class="col-lg-3 col-md-6">
         <h5 class="mb-3">Contact</h5>
         {% if contact %}
-          {% if contact.phone %}<div class="mb-2">{{ contact.phone }}</div>{% endif %}
+          {% if contact.phone_number %}<div class="mb-2">+91 {{ contact.phone_number }}</div>{% endif %}
           {% if contact.email %}<div class="mb-2">{{ contact.email }}</div>{% endif %}
           {% if contact.name %}<div class="mb-2">{{ contact.name }}</div>{% endif %}
         {% else %}

@@ -76,7 +76,7 @@ class Service(TimeStamped):
 
 class ProvenResult(TimeStamped):
     image = models.ImageField(upload_to="proven_results/")
-    title=models.CharField(max_length=200,null=True,blank=True)
+    title=models.CharField(max_length=400,null=True,blank=True)
     description = models.TextField()
     link = models.URLField(blank=True, null=True)
     link_text = models.CharField(max_length=60, blank=True, null=True)
@@ -103,7 +103,7 @@ class TrustedBy(TimeStamped):
 class ContactInfo(TimeStamped):
     name = models.CharField(max_length=120,null=True,blank=True)
     video = models.FileField(upload_to="Contact/", help_text="MP4 recommended",blank=True,null=True)
-    phone_number=models.BigIntegerField(MinValueValidator(0),null=True,blank=True)
+    phone_number=models.BigIntegerField(null=True,blank=True)
     address=models.CharField(max_length=200,null=True,blank=True)
     email = models.EmailField()
 
