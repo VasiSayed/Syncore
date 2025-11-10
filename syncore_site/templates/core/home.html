@@ -25,6 +25,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;color:var(--text-dark);overflow-x:hidden;background:var(--light-bg)}
 h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
+p{ text-align:justify; } /* justify all paragraph text */
 
 /* NAV */
 .navbar{ background:transparent; padding:0; box-shadow:none; }
@@ -79,21 +80,6 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
 .section-title{font-size:3.2rem;color:var(--primary-navy);margin:2.5rem 0 1.25rem;font-weight:400;text-align:center}
 .section-title-left{text-align:left;margin-top:0;margin-bottom:1.25rem}
 
-/* SERVICES (simplified) */
-#services .service-card{
-  flex-direction: column; align-items: flex-start; text-align: left;
-  gap: 10px; padding: 1.5rem 1.4rem;
-}
-#services .service-icon{
-  width: 44px; height: 44px; border-radius: 8px; background: transparent; box-shadow: none;
-  position: static; transform: none; margin: 0;
-}
-#services .service-icon svg, #services .service-icon i{ font-size: 28px; color:#1f2a56; }
-#services .service-title{ font-family:"Times New Roman", Times, Georgia, serif; font-weight:600; font-size:1.6rem; color:#1f2a56; margin:0; letter-spacing:.2px; }
-#services .service-link{ display:none !important; }
-#services .service-card::after{ content:none !important; }
-#services .service-card:hover{ transform:none; box-shadow:0 8px 28px rgba(0,0,0,.08); }
-
 /* STATS */
 .stat-card{background:#fff;padding:1.75rem;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.06)}
 .stat-number{font-size:3rem;font-weight:600;color:var(--primary-navy);letter-spacing:.5px}
@@ -102,20 +88,35 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
 /* SERVICES layout */
 .stats-services{padding:4rem 0;background:var(--light-bg)}
 .service-card{background:#fff;border-radius:18px;padding:1.7rem;box-shadow:0 8px 30px rgba(0,0,0,.06);display:flex;gap:16px;align-items:flex-start;min-height:90px}
-.service-icon{width:54px;height:54px;border-radius:12px;background:linear-gradient(135deg,#e8e8e8 0%,#f5f5f5 100%);display:flex;align-items:center;justify-content:center;flex:0 0 54px}
-.service-title{font-size:1.1rem;margin:0}
-.service-link a{font-size:.95rem}
+#services .service-card{flex-direction:column;align-items:flex-start;text-align:left;gap:10px;padding:1.5rem 1.4rem}
+#services .service-title{ font-family:"Times New Roman", Times, Georgia, serif; font-weight:600; font-size:1.6rem; color:#1f2a56; margin:0; letter-spacing:.2px; }
+#services .service-link{ display:none !important; }
+#services .service-card::after{ content:none !important; }
+#services .service-card:hover{ transform:none; box-shadow:0 8px 28px rgba(0,0,0,.08); }
+
+/* bigger icon + fallbacks */
+#services .service-icon{
+  width:52px;height:52px;border-radius:10px;background:transparent;box-shadow:none;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+#services .service-icon img{ width:34px;height:34px;object-fit:contain;display:block; }
+#services .service-icon .svg-wrap svg{ width:34px;height:34px;display:block; }
+#services .service-icon i{ font-size:34px; color:#1f2a56; }
+#services .service-icon-fallback{
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;color:#1f2a56;
+}
 .right-side-image{width:100%;height:300px;border-radius:28px;background-size:cover;background-position:center;box-shadow:0 16px 48px rgba(0,0,0,.12)}
 
 /* RESULTS vertical slider */
-.vslider { position: relative; height: 75vh; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.15);background:#0b1224; }
-.vslide { position: absolute; inset: 0; transform: translateY(100%); opacity: 0; transition: transform .6s ease, opacity .6s ease; }
-.vslide.active { transform: translateY(0); opacity: 1; }
-.vslide.exit-up   { transform: translateY(-100%); opacity: 0; }
-.vslide.exit-down { transform: translateY(100%);  opacity: 0; }
-.vslide.from-top  { transform: translateY(-100%); }
-.vslide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.65); }
-.vcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 2.5rem; color:#fff;background: linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 85%); }
+.vslider{ position:relative; height:75vh; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.15); background:#0b1224; }
+.vslide{ position:absolute; inset:0; transform:translateY(100%); opacity:0; transition:transform .6s ease, opacity .6s ease; }
+.vslide.active{ transform:translateY(0); opacity:1; }
+.vslide.exit-up{ transform:translateY(-100%); opacity:0; }
+.vslide.exit-down{ transform:translateY(100%); opacity:0; }
+.vslide.from-top{ transform:translateY(-100%); }
+.vslide img{ width:100%; height:100%; object-fit:cover; filter:brightness(.65); }
+.vcaption{ position:absolute; left:0; right:0; bottom:0; padding:2rem 2.5rem; color:#fff; background:linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 85%); }
 .vcaption h3{ font-size:2rem; margin:0 0 .5rem; }
 
 /* ABOUT sticky stack */
@@ -138,45 +139,39 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
 /* TEAM / LOGOS / FOOTER */
 .team-section{padding:5rem 0}
 .team-content-card{background:#fff;padding:3rem;border-radius:30px;box-shadow:0 15px 50px rgba(0,0,0,.08)}
+/* equal height helpers */
+.team-equal .col-lg-6{ display:flex; }
+.media-box{ height:100%; min-height:100%; }
+.team-content-card{ display:flex; flex-direction:column; }
+.object-cover{ object-fit:cover; display:block; }
+
 .logos-section{padding:4rem 0}
 .logo-card{background:#fff;padding:2.25rem;border-radius:22px;box-shadow:0 6px 25px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;height:120px}
 .logos-section .container{ padding-inline:32px; }
 @media (max-width: 991.98px){ .logos-section .container{ padding-inline:20px; } }
 .logo-card img{ display:block; max-width:100%; max-height:66px; margin:0 auto; object-fit:contain; }
 
-.footer{
-  background:#0f1a32; color:#fff; padding:6rem 0 2.25rem;
-}
-/* Footer grid to prevent column overlap */
+.footer{ background:#0f1a32; color:#fff; padding:6rem 0 2.25rem; }
 @media (min-width: 992px){
   .footer .row.footer-row{
     display: grid !important;
-    grid-template-columns: 5fr 3fr 2fr 2fr; /* Brand / Menu / Socials / Contact */
-    align-items: start;
-    column-gap: 48px;
+    grid-template-columns: 5fr 3fr 2fr 2fr;
+    align-items: start; column-gap: 48px;
   }
   .footer .row.footer-row > [class*="col-"]{
-    width: auto !important;
-    max-width: none !important;
-    flex: none !important;  /* stop Bootstrap from squeezing */
+    width:auto !important; max-width:none !important; flex:none !important;
   }
 }
-
-/* Brand block sizing */
 .footer .brand-box{ max-width: 520px; }
 .footer .navbar-brand{ display:block; padding:0; }
 .footer .logo-text{ font-size:2.2rem; line-height:1; font-weight:800; display:block; }
 .footer .logo-tagline{ font-size:.8rem; opacity:.85; margin-top:.35rem; }
 .footer .lead-copy{ margin:1.25rem 0 1.5rem; font-size:1.05rem; line-height:1.9; color:#d3d9e6; }
-
-/* CTA pill */
 .footer .btn-contact-nav{
   display:inline-block; background:#e7ecf6; color:#0f1a32!important;
   padding:.9rem 1.25rem; border-radius:999px; font-weight:700; text-decoration:none;
   box-shadow:0 6px 16px rgba(0,0,0,.15);
 }
-
-/* Headings + links */
 .footer h5{ font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:600; margin:0 0 1.1rem; }
 @media (max-width:991.98px){ .footer h5{ font-size:2rem; } }
 .footer a.text-white-50{ color:#bcc7dd!important; text-decoration:none; font-size:1.1rem; }
@@ -204,21 +199,59 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
   .about-image{height:360px}
   .vslider{height:60vh}
 }
+/* Approach step icon: fill tile + softer radius */
+.step-head{ gap:16px; } /* a touch more spacing */
+
+.step-icon{
+  width:64px; height:64px;          /* bigger tile */
+  flex:0 0 64px;
+  border-radius:18px;                /* slightly rounder */
+  background:rgba(45,77,217,.08);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+
+/* Make whatever is inside fill the box */
+.step-icon img,
+.step-icon .svg-wrap svg{
+  width:100%; height:100%;
+  display:block;
+  border-radius:inherit;             /* keep rounded corners on images/SVG */
+  object-fit:contain;                /* keep aspect ratio */
+}
+
+/* For font icons */
+.step-icon i{
+  font-size:40px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* Fallback initial */
+.step-icon .service-icon-fallback{
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:22px; color:#2d4dd9;
+  border-radius:inherit;
+}
+
+/* Tweak for smaller screens */
+@media (max-width: 991.98px){
+  .step-icon{ width:56px; height:56px; border-radius:16px; flex-basis:56px; }
+  .step-icon i{ font-size:32px; }
+}
+
+
 </style>
 {% endblock %}
-
 </head>
+
 <body>
 
-{% block components %}
-{# place modals/partials you want globally available #}
-{% endblock %}
-
+{% block components %}{% endblock %}
 
 <div class="glass-nav">
   <nav class="navbar navbar-expand-lg">
     <div class="glass-nav-inner container-fluid px-3">
-
       <a class="navbar-brand" href="{% url 'home' %}">
         <div class="brand-stack">
           <div class="logo-text"><span>Syn</span><span>Core</span></div>
@@ -247,7 +280,6 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
           </a>
         </div>
       </div>
-
     </div>
   </nav>
 </div>
@@ -301,10 +333,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
             <div class="col d-flex">
               <div class="service-card w-100">
                 <div class="service-icon">
-                  {% if s.icon_svg %}
-                    <span style="display:inline-block;width:28px;height:28px">{% autoescape off %}{{ s.icon_svg }}{% endautoescape %}</span>
+                  {% if s.icon %}
+                    <img src="{{ s.icon.url }}" alt="{{ s.title }}" />
+                  {% elif s.icon_svg %}
+                    <span class="svg-wrap">{% autoescape off %}{{ s.icon_svg }}{% endautoescape %}</span>
+                  {% elif s.icon_class %}
+                    <i class="{{ s.icon_class }}" aria-hidden="true" title="{{ s.title }}"></i>
                   {% else %}
-                    <i class="{{ s.icon_class }}" aria-hidden="true"></i>
+                    <span class="service-icon-fallback" aria-label="{{ s.title }}">{{ s.title|slice:":1"|upper }}</span>
                   {% endif %}
                 </div>
                 <div class="flex-grow-1">
@@ -359,6 +395,80 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
 </section>
 
 <section class="about-section" id="about">
+  <div class="container">
+    <h2 class="about-title">
+      {% if approach %}
+        {{ approach.heading|linebreaksbr }}
+      {% else %}
+        At Syncore Consulting, we believe that strategy<br/>
+        should do more than sit on paper — it should drive<br/>
+        measurable change.
+      {% endif %}
+    </h2>
+
+    <div class="row g-4 about-grid">
+      <div class="col-lg-6 about-left">
+        <div class="about-image-sticky">
+          <div class="about-image"
+               style="background-image:url('{% if approach and approach.image %}{{ approach.image.url }}{% else %}https://tse4.mm.bing.net/th/id/OIP.mrBjykZHJ1UcZXW3ybUZ_AHaE7?w=2000&h=1333&rs=1&pid=ImgDetMain&o=7&rm=3{% endif %}');">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 stack-steps">
+        {% if approach and approach.steps.all %}
+          {% for step in approach.steps.all %}
+         <div class="step-card" style="z-index:{{ forloop.revcounter|add:'10' }}">
+              <div class="step-head">
+<div class="step-icon">
+  {% if step.icon %}
+    <img src="{{ step.icon.url }}" alt="{{ step.title }}">
+  {% elif step.icon_svg %}
+    <span class="svg-wrap">{% autoescape off %}{{ step.icon_svg }}{% endautoescape %}</span>
+  {% elif step.icon_class %}
+    <i class="{{ step.icon_class }}" aria-hidden="true" title="{{ step.title }}"></i>
+  {% else %}
+    <span class="service-icon-fallback" aria-label="{{ step.title }}">
+      {{ step.title|slice:":1"|upper }}
+    </span>
+  {% endif %}
+</div>
+
+                <h4 class="step-title">{{ step.title }}</h4>
+              </div>
+
+              <div class="step-body">
+                <p>{{ step.body }}</p>
+                {% if step.body_secondary %}
+                  <p class="mb-0">{{ step.body_secondary }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          {# Fallback static (optional) #}
+          <div class="step-card" style="z-index:40">
+            <div class="step-head">
+              <div class="step-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path d="M9.7 17h4.6M12 3v1M21 12h-1M4 12H3M6.3 6.3l-.7-.7m12.1.7l-.7.7M8.1 14.5a5 5 0 117.8 0c-.6.6-1 .1-1 2.6V19a2 2 0 11-4 0v-.9c0-2.5-.4-2-1-2.6Z" stroke="#2d4dd9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h4 class="step-title">Understand</h4>
+            </div>
+            <div class="step-body">
+              <p>We immerse ourselves in your business to uncover challenges and opportunities.</p>
+              <p class="mb-0">Stakeholder interviews, data discovery, and quick-diagnostic workshops set the baseline.</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- <section class="about-section" id="about">
   <div class="container">
     <h2 class="about-title">
       At Syncore Consulting, we believe that strategy<br/>
@@ -437,21 +547,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
-<!-- TEAM -->
+<!-- TEAM (equal heights) -->
 <section class="team-section">
   <div class="container">
-    <div class="row align-items-center g-4">
-      <div class="col-lg-6">
-        <div class="team-content-card">
+    <div class="row g-4 team-equal align-items-stretch">
+      <div class="col-lg-6 d-flex">
+        <div class="team-content-card flex-grow-1">
           <h2 class="mb-2"><em>Transforming</em> Strategy into <em>Results</em></h2>
           <p class="mb-3">Our team brings together expertise in strategy, operations, finance, and digital transformation, with one shared mission: to simplify complexity and deliver results that last. Whether it’s entering new markets, streamlining processes, or guiding organizational change, we focus on creating solutions that are practical, actionable, and aligned with your goals.</p>
           <a href="#" class="hero-cta">Meet Our Team <span class="btn-icon">→</span></a>
         </div>
       </div>
-      <div class="col-lg-6">
-        <img src="https://tse2.mm.bing.net/th/id/OIP.2YnFRDT3m6dzAzhMTrDONgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Discussion" class="img-fluid rounded-4 shadow-lg">
+      <div class="col-lg-6 d-flex">
+        <div class="media-box rounded-4 shadow-lg w-100">
+          <img src="https://tse2.mm.bing.net/th/id/OIP.2YnFRDT3m6dzAzhMTrDONgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
+               alt="Discussion" class="w-100 h-100 object-cover">
+        </div>
       </div>
     </div>
   </div>
@@ -488,31 +601,30 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
   </div>
 </section>
 
-
 {% endblock %}
+
 <!-- FOOTER -->
 <footer class="footer" id="contact">
   <div class="container">
-    <div class="row g-4">
-<!-- LEFT column (brand) -->
-<div class="col-lg-4">
-  <div class="brand-box">
-    <a class="navbar-brand d-inline-block mb-2" href="{% url 'home' %}">
-      <div class="logo-text"><span>Syn</span><span>Core</span></div>
-      <div class="logo-tagline">Synchronizing around the Core...</div>
-    </a>
+    <div class="row g-4 footer-row">
+      <!-- LEFT column (brand) -->
+      <div class="col-lg-4">
+        <div class="brand-box">
+          <a class="navbar-brand d-inline-block mb-2" href="{% url 'home' %}">
+            <div class="logo-text"><span>Syn</span><span>Core</span></div>
+            <div class="logo-tagline">Synchronizing around the Core...</div>
+          </a>
 
-    <p class="lead-copy">
-      Syncore Consulting helps businesses streamline operations, optimize performance,
-      and achieve measurable growth.
-    </p>
+          <p class="lead-copy">
+            Syncore Consulting helps businesses streamline operations, optimize performance,
+            and achieve measurable growth.
+          </p>
 
-    <a href="mailto:{% if contact %}{{ contact.email }}{% endif %}" class="btn-contact-nav">
-      Contact Us
-    </a>
-  </div>
-</div>
-
+          <a href="mailto:{% if contact %}{{ contact.email }}{% endif %}" class="btn-contact-nav">
+            Contact Us
+          </a>
+        </div>
+      </div>
 
       <div class="col-lg-2 col-md-6">
         <h5 class="mb-3">Menu</h5>
@@ -548,7 +660,6 @@ h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
   </div>
 </footer>
 
-
 {% block page_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -572,7 +683,6 @@ window.addEventListener('scroll',()=>{
 (function () {
   const els=[...document.querySelectorAll('.stat-number')];
   if(!els.length) return;
-
   const animate=(el)=>{
     const end=Number(el.dataset.target||0);
     const suffix=(el.dataset.suffix||'').trim();
@@ -585,19 +695,17 @@ window.addEventListener('scroll',()=>{
     }
     requestAnimationFrame(tick);
   };
-
   const io=new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); }
     });
   },{threshold:0.3});
-
   els.forEach(el=>io.observe(el));
 })();
 </script>
 
 <script>
-// Results vertical slider
+// Results vertical slider (release page scroll at edges)
 (function() {
   const slider = document.getElementById('resultsVSlider');
   if (!slider) return;
@@ -610,7 +718,6 @@ window.addEventListener('scroll',()=>{
     if (current)  current.style.zIndex  = 2;
     if (incoming) incoming.style.zIndex = 3;
   }
-
   function go(to, dir){
     if (busy || to === i) return; busy = true;
     const current = slides[i]; const incoming = slides[to];
@@ -621,7 +728,6 @@ window.addEventListener('scroll',()=>{
     incoming.classList.add('active');
     setTimeout(()=>{ i = to; busy = false; }, 650);
   }
-
   function next(){ go((i+1)%slides.length, 'up'); }
   function prev(){ go((i-1+slides.length)%slides.length, 'down'); }
 
@@ -632,11 +738,20 @@ window.addEventListener('scroll',()=>{
   slider.addEventListener('mouseleave', start);
 
   slider.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    if (Math.abs(e.deltaY) < 4) return;
-    e.deltaY > 0 ? next() : prev();
+    const atFirst = (i === 0);
+    const atLast  = (i === slides.length - 1);
+    const goingDown = e.deltaY > 0;
+    const goingUp   = e.deltaY < 0;
+
+    // Intercept only if we can move inside the slider
+    if ((goingDown && !atLast) || (goingUp && !atFirst)) {
+      e.preventDefault();
+      goingDown ? next() : prev();
+    }
+    // else: allow page to scroll naturally
   }, { passive: false });
 
+  // Touch swipe (no preventDefault so page can continue past edges)
   let touchY = null;
   slider.addEventListener('touchstart', e => touchY = e.touches[0].clientY, {passive:true});
   slider.addEventListener('touchend', e => {
@@ -645,20 +760,21 @@ window.addEventListener('scroll',()=>{
     if (Math.abs(dy) > 30) { dy < 0 ? next() : prev(); }
     touchY = null;
   });
-
-  let lastY = null;
-  slider.addEventListener('mousemove', (e) => {
-    if (lastY !== null) {
-      const d = e.clientY - lastY;
-      if (d < -12) next();
-      if (d >  12) prev();
-    }
-    lastY = e.clientY;
-  });
 })();
 </script>
 
 <script>
+// Match team image box height to text card for perfect alignment
+function matchTeamHeights(){
+  const card = document.querySelector('.team-content-card');
+  const box  = document.querySelector('.media-box');
+  if(card && box){ box.style.minHeight = card.offsetHeight + 'px'; }
+}
+window.addEventListener('load', matchTeamHeights);
+window.addEventListener('resize', () => {
+  clearTimeout(window.__mh); window.__mh = setTimeout(matchTeamHeights, 120);
+});
+
 // Sync heights for sticky image/steps
 function syncAboutHeights() {
   const leftCol = document.querySelector('.about-left');

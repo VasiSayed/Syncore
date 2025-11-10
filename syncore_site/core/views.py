@@ -7,8 +7,20 @@ from django.utils.html import strip_tags
 from .forms import VisitorInfoForm
 from .models import ContactInfo
 from math import ceil
-from .models import FaceCompany, AboutUsStatic
+# core/views.py
+from math import ceil
+from django.shortcuts import render
 
+from .models import (
+    HomeBanner,
+    StaticMetric,
+    Service,
+    ProvenResult,
+    TrustedBy,
+    ContactInfo,
+    ApproachSection,FaceCompany,AboutUsStatic
+    
+    )
 
 def home(request):
     banner = HomeBanner.objects.filter(is_active=True).first()
@@ -22,6 +34,13 @@ def home(request):
     half = ceil(n / 2) if n else 0
     logos_top = logos_all[:half]
     logos_bottom = logos_all[half:]
+
+    # NEW: active Approach section + steps
+    approach = (
+        ApproachSection.objects.filter(is_active=True)
+        .prefetch_related("steps")
+        .first()
+    )
 
     ctx = {
         "banner": banner,
@@ -37,6 +56,9 @@ def home(request):
         "logos_bottom": logos_bottom,
 
         "contact": ContactInfo.objects.first(),
+
+        # pass to template
+        "approach": approach,
     }
     return render(request, "core/home.html", ctx)
 
@@ -143,7 +165,16 @@ def contact_form_view(request):
 
 
 def about_page(request):
-    data = AboutUsStatic.objects.filter(is_active=True).first() \
-           or AboutUsStatic.objects.order_by("-updated_at").first()
-    faces = FaceCompany.objects.all() 
-    return render(request, "core/about.html", {"data": data, "faces": faces})
+    data = (AboutUsStatic.objects.filter(is_active=True).first()
+            or AboutUsStatic.objects.order_by("-updated_at").first())
+
+    founder = FaceCompany.objects.filter(is_founder=True).first()
+    team = FaceCompany.objects.filter(is_founder=False).order_by("name")
+
+    context = {
+        "data": data,
+        "founder": founder,
+        "faces": team,    
+    }
+    return render(request, "core/about.html", context)
+

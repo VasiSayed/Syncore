@@ -57,6 +57,47 @@
 @media (max-width: 992px){ .mission-img-wrap{ height:340px } }
 @media (max-width: 576px){ .mission-img-wrap{ height:260px } }
 
+/* Founder block theme */
+.founder-stat{
+  background:#fff; border-radius:16px; padding:18px 20px;
+  box-shadow:0 8px 22px rgba(16,32,64,.08);
+}
+
+.founder-card{
+  position:relative; border-radius:22px; overflow:hidden;
+  box-shadow:0 20px 45px rgba(16,32,64,.12);
+}
+.founder-img{ width:100%; height:520px; object-fit:cover; display:block; }
+@media (max-width: 992px){ .founder-img{ height:420px } }
+@media (max-width: 576px){ .founder-img{ height:320px } }
+
+/* dark gradient for readable text */
+.founder-card::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+
+/* name/role */
+.founder-overlay{
+  position:absolute; left:22px; bottom:18px; color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.45);
+}
+
+/* award badge */
+.founder-badge{
+  position:absolute; right:18px; top:18px;
+}
+.badge-inner{
+  background:#fff; border-radius:14px; padding:16px 18px;
+  box-shadow:0 14px 30px rgba(16,32,64,.12);
+  display:flex; align-items:center; gap:10px;
+}
+.badge-icon{
+  width:34px; height:34px; border-radius:999px; display:grid; place-items:center;
+  background:#ffefe0; color:#c26b00; font-size:18px;
+}
+
 
   .face-card{overflow:hidden; border-radius:22px; background:#fff; box-shadow:0 10px 30px rgba(16,32,64,.08)}
 
@@ -91,7 +132,7 @@
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-5">
-        <div class="lead-kicker"><i></i> STRATWELL CONSULTING</div>
+        <!-- <div class="lead-kicker"><i></i> STRATWELL CONSULTING</div> -->
         <h2 class="display-5 title-serif mt-3">Who We Are</h2>
       </div>
       <div class="col-lg-7">
@@ -101,6 +142,86 @@
     </div>
   </div>
 </section>
+
+
+
+{% if founder %}
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <!-- Left: text -->
+      <div class="col-lg-6">
+        <div class="lead-kicker mb-3"><i></i> MEET OUR FOUNDER</div>
+        <h2 class="title-serif display-5 mb-3" style="color:#0b3b36;">
+          Leading with Vision,<br/>Delivering with Excellence
+        </h2>
+
+        <p class="mb-4" style="color:#506065;">
+          For over {{ founder.founder_year|default:'25' }} years, {{ founder.name }}
+          has been at the forefront of business transformation, helping organizations
+          achieve operational excellence through innovative consulting solutions.
+        </p>
+
+        <!-- Stats cards -->
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <div class="founder-stat">
+              <div class="fs-2 fw-bold">{{ founder.founder_year|default:'25' }}+</div>
+              <div class="text-muted">Years Experience</div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="founder-stat">
+              <div class="fs-2 fw-bold">{{ founder.consulting_engagements|default:'75' }}+</div>
+              <div class="text-muted">Consulting Engagements</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex gap-3">
+          <a href="#" class="chip-btn">
+            <span>View Profile</span>
+            <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M13 5h6v6h-2V8.41l-9.29 9.3-1.42-1.42 9.3-9.29H13V5z"/></svg></span>
+          </a>
+          <a href="{% url 'contact' %}" class="chip-btn chip-btn--dark">
+            <span>Get in Touch</span>
+            <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M13 5h6v6h-2V8.41l-9.29 9.3-1.42-1.42 9.3-9.29H13V5z"/></svg></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: image card with overlay -->
+      <div class="col-lg-6">
+        <div class="founder-card">
+          {% if founder.image %}
+            <img src="{{ founder.image.url }}" alt="{{ founder.name }}" class="founder-img">
+          {% else %}
+            <img src="{% static 'img/placeholder-founder.webp' %}" alt="{{ founder.name }}" class="founder-img">
+          {% endif %}
+
+          <!-- Award badge (optional static text) -->
+          <div class="founder-badge">
+            <div class="badge-inner">
+              <div class="badge-icon">🏅</div>
+              <div class="small fw-semibold">Top 25 Most Promising<br/>Business Consultants</div>
+            </div>
+          </div>
+
+          <!-- Name & role on image -->
+          <div class="founder-overlay">
+            <div class="fw-bold" style="font-size:1.35rem;">{{ founder.name }}</div>
+            <div class="opacity-75">{{ founder.position|default:"Founder & Managing Director" }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+
 
 <!-- MISSION -->
 <section class="py-5">
@@ -116,6 +237,9 @@
     {% endif %}
   </div>
 </div>
+
+
+
 <!-- TEXT (no typing JS; pure static) -->
 <div class="col-lg-6">
   <div id="missionTextBox" class="p-3 p-md-4 mission-card">
@@ -182,7 +306,7 @@
 </section>
 
 <!-- TEAM -->
-<section class="soft py-5">
+<!-- <section class="soft py-5">
   <div class="container">
     <div class="text-center mb-4">
       <div class="lead-kicker mb-2"><i></i> MEET OUR TEAM</div>
@@ -205,7 +329,7 @@
       {% endfor %}
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- CTA -->
 <section class="container my-5">

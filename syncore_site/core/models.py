@@ -50,12 +50,19 @@ class StaticMetric(TimeStamped):
 
 
 class Service(TimeStamped):
+    icon = models.ImageField(
+        upload_to="service_icons/",
+        blank=True, null=True,
+        verbose_name="Icon",  
+        help_text="Upload a square PNG/SVG (raster) for the service icon."
+    )
+
     icon_class = models.CharField(
-        max_length=120, blank=True,null=True,
+        max_length=120, blank=True, null=True,
         help_text="e.g. 'fa-solid fa-gear' or 'bi-gear'"
     )
     icon_svg = models.TextField(
-        blank=True,null=True,
+        blank=True, null=True,
         help_text="Paste inline SVG markup starting with <svg …>"
     )
     title = models.CharField(max_length=100)
@@ -66,10 +73,11 @@ class Service(TimeStamped):
         ordering = ["order", "id"]
 
     def clean(self):
-        if not self.icon_class and not self.icon_svg:
-            raise ValidationError("Provide either icon_class or icon_svg.")
-        if self.icon_class and self.icon_svg:
-            raise ValidationError("Use only one: icon_class OR icon_svg.")
+        chosen = sum(bool(x) for x in [self.icon, self.icon_class, self.icon_svg])
+        if chosen == 0:
+            raise ValidationError("Provide one of: Icon image, icon_class or icon_svg.")
+        if chosen > 1:
+            raise ValidationError("Use only one: Icon image OR icon_class OR icon_svg.")
 
     def __str__(self):
         return self.title
@@ -87,6 +95,79 @@ class ProvenResult(TimeStamped):
         ordering = ["order", "id"]
 
     def __str__(self): return f"Proven Result #{self.pk}"
+
+
+class ApproachSection(models.Model):
+    """
+    One record represents the 'About / Our Approach' section:
+    - a big left image
+    - the heading text above it
+    - an active flag (use only 1 active)
+    """
+    heading = models.TextField(
+        help_text="Main heading above the section. Use plain text; <br> will be inserted on line breaks."
+    )
+    image = models.ImageField(
+        upload_to="approach/",
+        blank=True, null=True,
+        help_text="Large left image."
+    )
+    is_active = models.BooleanField(default=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"ApproachSection #{self.pk} ({'ACTIVE' if self.is_active else 'inactive'})"
+
+    class Meta:
+        verbose_name = "Approach Section"
+        verbose_name_plural = "Approach Sections"
+
+
+class ApproachStep(models.Model):
+    """
+    Right-side cards, ordered: Understand / Strategize / Implement / Measure
+    """
+    section = models.ForeignKey(
+        ApproachSection,
+        related_name="steps",
+        on_delete=models.CASCADE
+    )
+    order = models.PositiveIntegerField(default=0)
+
+    icon = models.ImageField(
+        upload_to="approach/icons/",
+        blank=True, null=True,
+        help_text="Upload small square image for the step icon."
+    )
+    icon_class = models.CharField(
+        max_length=120, blank=True, null=True,
+        help_text="e.g. 'fa-solid fa-bolt' or 'bi-lightning-charge'"
+    )
+    icon_svg = models.TextField(
+        blank=True, null=True,
+        help_text="Paste inline SVG markup starting with <svg …>"
+    )
+
+    title = models.CharField(max_length=80)
+    body = models.TextField(help_text="First paragraph.")
+    body_secondary = models.TextField(blank=True, help_text="Optional second paragraph.")
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.order:02d} · {self.title}"
+
+    def clean(self):
+        chosen = sum(bool(x) for x in [self.icon, self.icon_class, self.icon_svg])
+        if chosen == 0:
+            raise ValidationError("Provide one of: icon image, icon_class or icon_svg.")
+        if chosen > 1:
+            raise ValidationError("Use only one: icon image OR icon_class OR icon_svg.")
+
 
 
 class TrustedBy(TimeStamped):
@@ -131,11 +212,18 @@ class VisitorInfo(models.Model):
 
 IMG_VALIDATOR = FileExtensionValidator(["jpg", "jpeg", "png", "webp"])
 
+
+
 class FaceCompany(models.Model):
     image = models.ImageField(upload_to="faces/", validators=[IMG_VALIDATOR])
     name = models.CharField(max_length=120)
     position = models.CharField(max_length=120, blank=True)
+
     is_founder = models.BooleanField(default=False)
+    founder_year = models.PositiveIntegerField(null=True, blank=True, help_text="e.g. 25 (years of experience)")
+    consulting_engagements = models.PositiveIntegerField(
+        null=True, blank=True, help_text="e.g. 75 (engagements)"
+    )
 
     class Meta:
         ordering = ["-is_founder", "name"]
@@ -149,7 +237,7 @@ class FaceCompany(models.Model):
 
     def __str__(self):
         return f"{self.name} ({'Founder' if self.is_founder else self.position})"
-
+    
 
 class AboutUsStatic(models.Model):
     """
