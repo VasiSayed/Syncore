@@ -4,6 +4,8 @@ from django.utils.html import format_html, mark_safe
 from django.db import transaction
 from django.forms import Textarea
 from django.db import models as dj_models
+from .models import SocialMedia
+
 
 from .models import (
     HomeBanner,
@@ -102,7 +104,6 @@ class AboutUsStaticAdmin(admin.ModelAdmin):
         self.message_user(request, "Active record updated.", level=messages.SUCCESS)
 
 
-# ---- Approach (Inline + its own page) ----
 
 class ApproachStepInline(admin.StackedInline):
     model = ApproachStep
@@ -197,3 +198,75 @@ class ApproachStepAdmin(admin.ModelAdmin):
             return format_html('<i class="{}" style="font-size:22px"></i>', obj.icon_class)
         return "—"
     icon_preview.short_description = "Preview"
+
+
+from django.utils.html import format_html
+from .models import Transform
+
+@admin.register(Transform)
+class TransformAdmin(admin.ModelAdmin):
+    list_display = ("heading", "is_active", "button_text", "link", "updated_at")
+    list_filter  = ("is_active", "updated_at")
+    search_fields = ("heading", "body_text")
+    readonly_fields = ("image_preview",)
+    fields = ("heading", "body_text", "image", "image_preview", "link", "button_text", "is_active")
+    actions = ["make_active"]
+
+    def image_preview(self, obj):
+        if getattr(obj, "image", None):
+            try:
+                return format_html('<img src="{}" style="max-height:120px;border-radius:10px;">', obj.image.url)
+            except Exception:
+                pass
+        return "—"
+    image_preview.short_description = "Preview"
+
+    @admin.action(description="Make selected Transform ACTIVE (others become inactive)")
+    def make_active(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, "Select exactly one row to activate.", level=messages.WARNING)
+            return
+        obj = queryset.first()
+        with transaction.atomic():
+            Transform.objects.filter(is_active=True).exclude(pk=obj.pk).update(is_active=False)
+            obj.is_active = True
+            obj.save(update_fields=["is_active"])
+        self.message_user(request, f"‘{obj.heading}’ is now the active Transform.", level=messages.SUCCESS)
+
+
+
+
+@admin.register(SocialMedia)
+class SocialMediaAdmin(admin.ModelAdmin):
+    list_display = ("id", "preview", "link_tag", "order", "updated_at")
+    list_editable = ("order",)
+    search_fields = ("link",)
+    ordering = ("order", "id")
+    save_on_top = True
+
+    readonly_fields = ("preview_large", "created_at", "updated_at")
+    fields = ("image", "link", "order", "preview_large", "created_at", "updated_at")
+
+    def link_tag(self, obj):
+        return format_html('<a href="{0}" target="_blank" rel="noopener">{0}</a>', obj.link)
+    link_tag.short_description = "Link"
+
+    def preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="width:40px;height:40px;object-fit:contain;border-radius:6px" />',
+                obj.image.url,
+            )
+        return "—"
+    preview.short_description = "Icon"
+
+    def preview_large(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="max-width:200px;height:80px;object-fit:contain;border-radius:8px;border:1px solid #eee;padding:4px;background:#fff" />',
+                obj.image.url,
+            )
+        return "—"
+    preview_large.short_description = "Preview"
+
+

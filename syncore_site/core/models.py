@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
+from django.db.models import Max
+
 
 class TimeStamped(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,6 +16,12 @@ class TimeStamped(models.Model):
 class HomeBanner(models.Model):
     video = models.FileField(upload_to="banners/", help_text="MP4 recommended")
     is_active = models.BooleanField(default=False)
+    service_image = models.ImageField(
+        upload_to="serice_image/",
+        blank=True, null=True,
+        verbose_name="Service Image",  
+        help_text="Upload a square PNG/SVG (raster) for the service icon."
+    )
 
     class Meta:
         constraints = [
@@ -81,6 +89,38 @@ class Service(TimeStamped):
 
     def __str__(self):
         return self.title
+
+
+
+class Transform(models.Model):
+    heading = models.CharField(max_length=200)
+    body_text = models.TextField()
+    image = models.ImageField(upload_to="transform/", blank=True, null=True)
+    link = models.URLField(blank=True)
+    button_text = models.CharField(max_length=60, blank=True, default="Learn more")
+
+    is_active = models.BooleanField(default=False)  # <-- only one True allowed
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["is_active"],
+                condition=Q(is_active=True),
+                name="uniq_active_transform"
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            type(self).objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.heading
 
 
 class ProvenResult(TimeStamped):
@@ -169,7 +209,6 @@ class ApproachStep(models.Model):
             raise ValidationError("Use only one: icon image OR icon_class OR icon_svg.")
 
 
-
 class TrustedBy(TimeStamped):
     logo = models.ImageField(upload_to="trusted_by/")
     order = models.PositiveIntegerField(default=0)
@@ -256,8 +295,8 @@ class AboutUsStatic(models.Model):
 
     stat_clients_percent = models.IntegerField(default=92)   
     stat_revenue_millions = models.IntegerField(default=50)  
-    stat_businesses       = models.IntegerField(default=100) # -> 100+
-    stat_years            = models.IntegerField(default=15)  # -> 15+
+    stat_businesses       = models.IntegerField(default=100) 
+    stat_years            = models.IntegerField(default=15)  
 
     updated_at = models.DateTimeField(auto_now=True)
     is_active  = models.BooleanField(default=False)
@@ -275,4 +314,30 @@ class AboutUsStatic(models.Model):
 
     def __str__(self):
         return f"AboutUsStatic #{self.pk} (updated {self.updated_at:%Y-%m-%d})"
+
+
+
+
+class SocialMedia(models.Model):
+    image = models.ImageField(upload_to="socials/")
+    link = models.URLField()
+    order = models.PositiveIntegerField(default=0, db_index=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+        constraints = [
+            models.UniqueConstraint(fields=["order"], name="unique_socialmedia_order")
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self.order:
+            max_order = SocialMedia.objects.aggregate(m=Max("order"))["m"] or 0
+            self.order = max_order + 1
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.link} (#{self.order})"
 

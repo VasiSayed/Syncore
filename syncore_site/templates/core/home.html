@@ -2,473 +2,1370 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>{% block title %}SynCore - Synchronizing around the Core{% endblock %}</title>
+    <title>
+      {% block title %}SynCore - Synchronizing around the Core{% endblock %}
+    </title>
 
-{% block page_css %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block page_css %}
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-<style>
-:root{
-  --primary-navy:#1e2a4a; --primary-blue:#2d4dd9; --accent-red:#c42026;
-  --light-bg:#f0f2f8; --white:#fff; --text-dark:#1e2a4a; --text-gray:#5a6a7f;
+    <style>
+:root {
+  --primary-navy: #1e2a4a;
+  --primary-blue: #2d4dd9;
+  --accent-red: #c42026;
+  --light-bg: #f0f2f8;
+  --white: #fff;
+  --text-dark: #1e2a4a;
+  --text-gray: #5a6a7f;
   --services-h: 460px;
-  --brand-red:#9c1111;
-  --brand-green:#0f423a;
+  --brand-red: #9c1111;
+  --brand-green: #0f423a;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;color:var(--text-dark);overflow-x:hidden;background:var(--light-bg)}
-h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif}
-p{ text-align:justify; } /* justify all paragraph text */
 
-/* NAV */
-.navbar{ background:transparent; padding:0; box-shadow:none; }
-.glass-nav{ position:absolute; top:14px; left:0; right:0; z-index:1100; pointer-events:none; }
-.glass-nav-inner{
-  pointer-events:auto; margin:0 auto; width:min(1180px, calc(100% - 48px));
-  display:flex; align-items:center; justify-content:space-between; gap:24px;
-  padding:16px 22px; border-radius:28px;
-  background:rgba(15, 23, 42, .28); border:1px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(14px) saturate(120%); -webkit-backdrop-filter:blur(14px) saturate(120%);
-  box-shadow:0 10px 40px rgba(0,0,0,.22);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.navbar-brand{ background:transparent; border-radius:0; margin:0; padding:2px 0; box-shadow:none; display:flex; align-items:center; }
-.brand-stack{display:flex; flex-direction:column; align-items:center; line-height:1;}
-.logo-text{font-size:1.6rem;font-weight:800;letter-spacing:.3px;line-height:1}
-.logo-text span:first-child{color:#e34a4a;}
-.logo-text span:last-child{color:#1ce1c8;}
-.logo-tagline{font-size:.70rem; color:#e5e7eb; margin-top:2px; opacity:.9}
-.nav-menu{display:flex;align-items:center;gap:44px;margin:0 auto;}
-.nav-link{ color:#fff!important; font-weight:600; letter-spacing:.2px; text-shadow:0 1px 2px rgba(0,0,0,.35); opacity:.95; }
-.nav-link:hover{opacity:1}
-.btn-contact-pill{
-  background:transparent; color:#fff; border:1.6px solid rgba(255,255,255,.85);
-  padding:10px 18px; border-radius:999px; font-weight:700; box-shadow:none;
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text-dark);
+  overflow-x: hidden;
+  background: var(--light-bg);
 }
-.navbar-toggler{border:0; box-shadow:none !important;}
-.navbar-toggler-icon{
-  width:1.5rem;height:1.5rem;background-size:100% 100%;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
 }
-@media (max-width: 991.98px){
-  .glass-nav-inner{padding:12px 14px}
-  .nav-menu{gap:18px;margin:12px 0 0}
-  .nav-link{color:#fff!important;text-shadow:none}
-  .btn-contact-pill{width:100%}
+
+p {
+  text-align: justify;
+}
+/* NAV - FIXED ON SCROLL */
+.navbar {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  transition: all 0.3s ease;
+}
+
+.glass-nav {
+  position: fixed;  /* Changed from absolute to fixed */
+  top: 14px;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  pointer-events: none;
+  transition: top 0.3s ease;
+}
+
+.glass-nav.scrolled {
+  top: 8px;  /* Slightly closer to top when scrolled */
+}
+
+.glass-nav-inner {
+  pointer-events: auto;
+  margin: 0 auto;
+  width: min(1180px, calc(100% - 48px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 22px;
+  border-radius: 28px;
+  background: rgba(15, 23, 42, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.22);
+  transition: all 0.3s ease;
+}
+
+.glass-nav.scrolled .glass-nav-inner {
+  background: rgba(15, 23, 42, 0.42);  /* More opaque when scrolled */
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+  background: transparent;
+  border-radius: 0;
+  margin: 0;
+  padding: 2px 0;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+}
+
+.brand-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.logo-text {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.logo-text span:first-child {
+  color: #e34a4a;
+}
+
+.logo-text span:last-child {
+  color: #1ce1c8;
+}
+
+.logo-tagline {
+  font-size: 0.7rem;
+  color: #e5e7eb;
+  margin-top: 2px;
+  opacity: 0.9;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 44px;
+  margin: 0 auto;
+}
+
+.nav-link {
+  color: #fff !important;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  opacity: 0.95;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+.btn-contact-pill {
+  background: transparent;
+  color: #fff;
+  border: 1.6px solid rgba(255, 255, 255, 0.85);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.navbar-toggler {
+  border: 0;
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+@media (max-width: 991.98px) {
+  .glass-nav-inner {
+    padding: 12px 14px;
+  }
+  .nav-menu {
+    gap: 18px;
+    margin: 12px 0 0;
+  }
+  .nav-link {
+    color: #fff !important;
+    text-shadow: none;
+  }
+  .btn-contact-pill {
+    width: 100%;
+  }
 }
 
 /* HERO */
-.hero-wrap{position:relative;margin-top:0}
-.hero-media{position:absolute;inset:0;width:100%;height:100vh;object-fit:cover;z-index:0}
-.hero-section{height:100vh;display:flex;align-items:stretch;position:relative;overflow:hidden}
-.hero-content{position:relative;z-index:2;height:100%;display:flex;align-items:flex-end}
-.hero-row{width:100%;display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;padding:0 3rem 3rem}
-.hero-title{font-size:5rem;font-weight:400;color:#fff;line-height:1.1;margin:0;text-shadow:0 8px 30px rgba(0,0,0,.45)}
-.hero-cta{background:#fff;color:var(--primary-navy);padding:1.1rem 1.6rem;border-radius:50px;font-weight:600;border:none;display:inline-flex;align-items:center;gap:.8rem;box-shadow:0 8px 25px rgba(0,0,0,.2)}
-.btn-icon{width:34px;height:34px;background:var(--primary-navy);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.hero-wrap {
+  position: relative;
+  margin-top: 0;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding: 0 3rem 3rem;
+}
+
+.hero-title {
+  font-size: 5rem;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0;
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.hero-cta {
+  background: #fff;
+  color: var(--primary-navy);
+  padding: 1.1rem 1.6rem;
+  border-radius: 50px;
+  font-weight: 600;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--primary-navy);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
 
 /* SHARED */
-.dot-indicator{width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-.dot{width:12px;height:12px;background:var(--primary-blue);border-radius:50%}
-.section-title{font-size:3.2rem;color:var(--primary-navy);margin:2.5rem 0 1.25rem;font-weight:400;text-align:center}
-.section-title-left{text-align:left;margin-top:0;margin-bottom:1.25rem}
+.dot-indicator {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: none !important;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background: var(--primary-blue);
+  border-radius: 50%;
+}
+
+.section-title {
+  font-size: 3.2rem;
+  color: var(--primary-navy);
+  margin: 2.5rem 0 1.25rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.section-title-left {
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
 
 /* STATS */
-.stat-card{background:#fff;padding:1.75rem;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.06)}
-.stat-number{font-size:3rem;font-weight:600;color:var(--primary-navy);letter-spacing:.5px}
-.stat-label{font-size:1rem;color:var(--text-gray)}
+.stat-card {
+  background: #fff;
+  padding: 1.75rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--primary-navy);
+  letter-spacing: 0.5px;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: var(--text-gray);
+}
 
 /* SERVICES layout */
-.stats-services{padding:4rem 0;background:var(--light-bg)}
-.service-card{background:#fff;border-radius:18px;padding:1.7rem;box-shadow:0 8px 30px rgba(0,0,0,.06);display:flex;gap:16px;align-items:flex-start;min-height:90px}
-#services .service-card{flex-direction:column;align-items:flex-start;text-align:left;gap:10px;padding:1.5rem 1.4rem}
-#services .service-title{ font-family:"Times New Roman", Times, Georgia, serif; font-weight:600; font-size:1.6rem; color:#1f2a56; margin:0; letter-spacing:.2px; }
-#services .service-link{ display:none !important; }
-#services .service-card::after{ content:none !important; }
-#services .service-card:hover{ transform:none; box-shadow:0 8px 28px rgba(0,0,0,.08); }
+.stats-services {
+  padding: 4rem 0;
+  background: var(--light-bg);
+}
 
-/* bigger icon + fallbacks */
-#services .service-icon{
-  width:52px;height:52px;border-radius:10px;background:transparent;box-shadow:none;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
+.service-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.7rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  min-height: 90px;
 }
-#services .service-icon img{ width:34px;height:34px;object-fit:contain;display:block; }
-#services .service-icon .svg-wrap svg{ width:34px;height:34px;display:block; }
-#services .service-icon i{ font-size:34px; color:#1f2a56; }
-#services .service-icon-fallback{
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:16px;color:#1f2a56;
+
+#services .service-card {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 10px;
+  padding: 1.5rem 1.4rem;
 }
-.right-side-image{width:100%;height:300px;border-radius:28px;background-size:cover;background-position:center;box-shadow:0 16px 48px rgba(0,0,0,.12)}
+
+#services .service-title {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  color: #1f2a56;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+#services .service-link {
+  display: none !important;
+}
+
+#services .service-card::after {
+  content: none !important;
+}
+
+#services .service-card:hover {
+  transform: none;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+#services .service-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#services .service-icon img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+}
+
+#services .service-icon .svg-wrap svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+#services .service-icon i {
+  font-size: 34px;
+  color: #1f2a56;
+}
+
+#services .service-icon-fallback {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #1f2a56;
+}
+
+.right-side-image {
+  width: 100%;
+  height: 300px;
+  border-radius: 28px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
 
 /* RESULTS vertical slider */
-.vslider{ position:relative; height:75vh; border-radius:24px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.15); background:#0b1224; }
-.vslide{ position:absolute; inset:0; transform:translateY(100%); opacity:0; transition:transform .6s ease, opacity .6s ease; }
-.vslide.active{ transform:translateY(0); opacity:1; }
-.vslide.exit-up{ transform:translateY(-100%); opacity:0; }
-.vslide.exit-down{ transform:translateY(100%); opacity:0; }
-.vslide.from-top{ transform:translateY(-100%); }
-.vslide img{ width:100%; height:100%; object-fit:cover; filter:brightness(.65); }
-.vcaption{ position:absolute; left:0; right:0; bottom:0; padding:2rem 2.5rem; color:#fff; background:linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 85%); }
-.vcaption h3{ font-size:2rem; margin:0 0 .5rem; }
+.vslider {
+  position: relative;
+  height: 75vh;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  background: #0b1224;
+}
+
+.vslide {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.vslide.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.vslide.exit-up {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.vslide.exit-down {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.vslide.from-top {
+  transform: translateY(-100%);
+}
+
+.vslide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.65);
+}
+
+.vcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2rem 2.5rem;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.75) 85%);
+}
+
+.vcaption h3 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
 
 /* ABOUT sticky stack */
-.about-section{padding:5rem 0}
-.about-title{font-size:3rem;text-align:left;margin-bottom:2rem}
-.about-grid{align-items:start}
-.about-image-sticky{position:sticky;top:100px}
-@media (max-width:991.98px){ .about-image-sticky{position:static} }
-.about-image{width:100%;height:600px;border-radius:30px;background-size:cover;background-position:center;box-shadow:0 12px 40px rgba(0,0,0,.12)}
-.stack-steps{counter-reset:step}
-.stack-steps .step-card{position:sticky; top:110px; margin:0; padding:1.75rem 2rem;background:#fff; border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,.10)}
-.stack-steps .step-card + .step-card{ margin-top:60px; }
-.stack-steps .step-card::after{counter-increment:step; content:counter(step,decimal-leading-zero); position:absolute; top:.8rem; right:1rem; font-family:'Playfair Display',serif;font-size:3rem; color:var(--primary-blue); opacity:.25;}
-.step-head{ display:flex; align-items:center; gap:12px; margin-bottom:.5rem;}
-.step-icon{ width:56px; height:56px; border-radius:14px; background:rgba(45,77,217,.08); display:flex; align-items:center; justify-content:center; flex:0 0 56px; }
-.step-title{ margin:0; font-size:1.6rem; color:var(--primary-navy); }
-.step-body{ color:var(--text-gray); }
-@media (max-width:991.98px){ .stack-steps .step-card + .step-card{ margin-top:1rem; } }
+.about-section {
+  padding: 5rem 0;
+}
 
-/* TEAM / LOGOS / FOOTER */
-.team-section{padding:5rem 0}
-.team-content-card{background:#fff;padding:3rem;border-radius:30px;box-shadow:0 15px 50px rgba(0,0,0,.08)}
-/* equal height helpers */
-.team-equal .col-lg-6{ display:flex; }
-.media-box{ height:100%; min-height:100%; }
-.team-content-card{ display:flex; flex-direction:column; }
-.object-cover{ object-fit:cover; display:block; }
+.about-title {
+  font-size: 3rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
 
-.logos-section{padding:4rem 0}
-.logo-card{background:#fff;padding:2.25rem;border-radius:22px;box-shadow:0 6px 25px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;height:120px}
-.logos-section .container{ padding-inline:32px; }
-@media (max-width: 991.98px){ .logos-section .container{ padding-inline:20px; } }
-.logo-card img{ display:block; max-width:100%; max-height:66px; margin:0 auto; object-fit:contain; }
+.about-grid {
+  align-items: start;
+}
 
-.footer{ background:#0f1a32; color:#fff; padding:6rem 0 2.25rem; }
-@media (min-width: 992px){
-  .footer .row.footer-row{
+.about-image-sticky {
+  position: sticky;
+  top: 100px;
+}
+
+.about-image {
+  width: 100%;
+  height: 600px;
+  border-radius: 30px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.stack-steps {
+  counter-reset: step;
+}
+
+.stack-steps .step-card {
+  position: sticky;
+  top: 110px;
+  margin: 0;
+  padding: 1.75rem 2rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.stack-steps .step-card:nth-child(1) { z-index: 10; }
+
+.stack-steps .step-card + .step-card {
+  margin-top: 60px;
+}
+
+.stack-steps .step-card::after {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  color: var(--primary-blue);
+  opacity: 0.25;
+}
+
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 0.5rem;
+}
+
+.step-icon {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  border-radius: 18px;
+  background: rgba(45, 77, 217, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.navbar-brand {
+  background: transparent;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 65px;  /* Increased from 45px */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Responsive logo sizing */
+@media (max-width: 991.98px) {
+  .navbar-logo {
+    height: 50px;  /* Increased from 38px */
+  }
+}
+
+/* Footer logo */
+.footer .navbar-brand {
+  display: block;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.footer .footer-logo {
+  height: 80px;  /* Increased from 60px */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@media (max-width: 991.98px) {
+  .footer .footer-logo {
+    height: 65px;
+  }
+}
+
+.step-icon img,
+.step-icon .svg-wrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  object-fit: contain;
+}
+
+.step-icon i {
+  font-size: 40px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-icon .service-icon-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 22px;
+  color: #2d4dd9;
+  border-radius: inherit;
+}
+
+.step-title {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--primary-navy);
+}
+
+.step-body {
+  color: var(--text-gray);
+}
+
+/* TEAM */
+.team-section {
+  padding: 5rem 0;
+}
+
+.team-content-card {
+  background: #fff;
+  padding: 3rem;
+  border-radius: 30px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.team-equal .col-lg-6 {
+  display: flex;
+}
+
+.media-box {
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+#transform .media-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.object-cover {
+  object-fit: cover;
+  display: block;
+}
+
+/* LOGOS */
+.logos-section {
+  padding: 4rem 0;
+}
+
+.logo-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 22px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+.logos-section .container {
+  padding-inline: 32px;
+}
+
+.logo-card img {
+  display: block;
+  max-width: 100%;
+  max-height: 66px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.logos-marquee {
+  display: grid;
+  gap: 18px;
+}
+
+.logos-marquee-row {
+  position: relative;
+  overflow: hidden;
+  height: 120px;
+  border-radius: 20px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: max-content;
+  will-change: transform;
+  --dur: 30s;
+}
+
+.marquee-track.rtl {
+  animation: marquee-rtl var(--dur) linear infinite;
+}
+
+.marquee-track.ltr {
+  animation: marquee-ltr var(--dur) linear infinite;
+}
+
+.logos-marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-ltr {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+/* FOOTER */
+.footer {
+  background: #0f1a32;
+  color: #fff;
+  padding: 6rem 0 2.25rem;
+}
+
+.footer .brand-box {
+  max-width: 520px;
+}
+
+.footer .navbar-brand {
+  display: block;
+  padding: 0;
+}
+
+.footer .logo-text {
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 800;
+  display: block;
+}
+
+.footer .logo-tagline {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: 0.35rem;
+}
+
+.footer .lead-copy {
+  margin: 1.25rem 0 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #d3d9e6;
+}
+
+.footer .btn-contact-nav {
+  display: inline-block;
+  background: #e7ecf6;
+  color: #0f1a32 !important;
+  padding: 0.9rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.footer h5 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin: 0 0 1.1rem;
+}
+
+.footer a.text-white-50 {
+  color: #bcc7dd !important;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.footer a.text-white-50:hover {
+  color: #fff !important;
+}
+
+.footer .contact-line,
+.footer .col-lg-3 .mb-2 {
+  color: #dfe6f5;
+  font-size: 1.15rem;
+}
+
+/* ===================================
+   FOOTER SOCIAL ICONS - COMPACT VERTICAL STACK
+   =================================== */
+.footer .footer-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;  /* Reduced spacing */
+  align-items: flex-start;
+  margin-top: 0.5rem;
+}
+
+.footer .social-pill {
+  width: 38px;  /* Smaller size */
+  height: 38px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.18);  /* Subtle border */
+  background: transparent;  /* Remove white background */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  padding: 0;
+}
+
+.footer .social-pill:hover {
+  background: rgba(255, 255, 255, 0.08);  /* Subtle hover */
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateX(3px);
+}
+
+
+.footer .navbar-brand {
+  display: block;
+  padding: 0;
+}
+
+.footer .footer-logo {
+  height: 60px;  
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.footer .social-pill img {
+  width: 20px;  /* Smaller icon */
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+
+.footer .social-fallback {
+  color: #0f1a32;
+  background: #e7ecf6;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.footer .social-pill.invert img {
+  filter: invert(1);
+}
+
+
+/* RESPONSIVE */
+@media (min-width: 992px) {
+  .footer .row.footer-row {
     display: grid !important;
     grid-template-columns: 5fr 3fr 2fr 2fr;
-    align-items: start; column-gap: 48px;
+    align-items: start;
+    column-gap: 48px;
   }
-  .footer .row.footer-row > [class*="col-"]{
-    width:auto !important; max-width:none !important; flex:none !important;
+  .footer .row.footer-row > [class*="col-"] {
+    width: auto !important;
+    max-width: none !important;
+    flex: none !important;
   }
 }
-.footer .brand-box{ max-width: 520px; }
-.footer .navbar-brand{ display:block; padding:0; }
-.footer .logo-text{ font-size:2.2rem; line-height:1; font-weight:800; display:block; }
-.footer .logo-tagline{ font-size:.8rem; opacity:.85; margin-top:.35rem; }
-.footer .lead-copy{ margin:1.25rem 0 1.5rem; font-size:1.05rem; line-height:1.9; color:#d3d9e6; }
-.footer .btn-contact-nav{
-  display:inline-block; background:#e7ecf6; color:#0f1a32!important;
-  padding:.9rem 1.25rem; border-radius:999px; font-weight:700; text-decoration:none;
-  box-shadow:0 6px 16px rgba(0,0,0,.15);
-}
-.footer h5{ font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:600; margin:0 0 1.1rem; }
-@media (max-width:991.98px){ .footer h5{ font-size:2rem; } }
-.footer a.text-white-50{ color:#bcc7dd!important; text-decoration:none; font-size:1.1rem; }
-.footer a.text-white-50:hover{ color:#fff!important; }
-.footer .contact-line, .footer .col-lg-3 .mb-2{ color:#dfe6f5; font-size:1.15rem; }
 
-.logos-marquee{ display:grid; gap:18px; }
-.logos-marquee-row{ position:relative; overflow:hidden; height:120px; border-radius:20px;
-  -webkit-mask-image:linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
-          mask-image:linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+@media (max-width: 991.98px) {
+  .about-image-sticky {
+    position: static;
+  }
+  .stack-steps .step-card + .step-card {
+    margin-top: 1rem;
+  }
+  .step-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    flex-basis: 56px;
+  }
+  .step-icon i {
+    font-size: 32px;
+  }
+  #transform .media-box {
+    height: auto !important;
+  }
+  #transform .media-box img {
+    height: auto;
+  }
+.footer h5 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;  
 }
-.marquee-track{ display:flex; align-items:center; gap:24px; width:max-content; will-change:transform; --dur:30s; }
-.marquee-track.rtl{ animation:marquee-rtl var(--dur) linear infinite; }
-.marquee-track.ltr{ animation:marquee-ltr var(--dur) linear infinite; }
-.logos-marquee-row:hover .marquee-track{ animation-play-state:paused; }
-@media (prefers-reduced-motion:reduce){ .marquee-track{ animation:none !important; } }
-@keyframes marquee-rtl { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-@keyframes marquee-ltr { from{transform:translateX(-50%)} to{transform:translateX(0)} }
-
-/* Misc */
-.dot-indicator{ display:none !important; }
-@media (max-width:992px){
-  .hero-title{font-size:2.6rem}
-  .hero-row{flex-direction:column;align-items:flex-start;padding:0 1.25rem 2rem}
-  .about-image{height:360px}
-  .vslider{height:60vh}
-}
-/* Approach step icon: fill tile + softer radius */
-.step-head{ gap:16px; } /* a touch more spacing */
-
-.step-icon{
-  width:64px; height:64px;          /* bigger tile */
-  flex:0 0 64px;
-  border-radius:18px;                /* slightly rounder */
-  background:rgba(45,77,217,.08);
-  display:flex; align-items:center; justify-content:center;
-  overflow:hidden;
+  .logos-section .container {
+    padding-inline: 20px;
+  }
 }
 
-/* Make whatever is inside fill the box */
-.step-icon img,
-.step-icon .svg-wrap svg{
-  width:100%; height:100%;
-  display:block;
-  border-radius:inherit;             /* keep rounded corners on images/SVG */
-  object-fit:contain;                /* keep aspect ratio */
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 2.6rem;
+  }
+  .hero-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 1.25rem 2rem;
+  }
+  .about-image {
+    height: 360px;
+  }
+  .vslider {
+    height: 60vh;
+  }
 }
 
-/* For font icons */
-.step-icon i{
-  font-size:40px; line-height:1;
-  display:flex; align-items:center; justify-content:center;
+@media (max-width: 480px) {
+  .footer .footer-socials {
+    flex-wrap: wrap;
+  }
 }
 
-/* Fallback initial */
-.step-icon .service-icon-fallback{
-  width:100%; height:100%;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:22px; color:#2d4dd9;
-  border-radius:inherit;
+.navbar-brand {
+  background: transparent;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
 }
+/* =========================
+   OVERRIDES (paste at end)
+   ========================= */
 
-/* Tweak for smaller screens */
+/* Bigger brand logos */
+.navbar-logo{
+  height: 80px;          /* was ~45–65px */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
 @media (max-width: 991.98px){
-  .step-icon{ width:56px; height:56px; border-radius:16px; flex-basis:56px; }
-  .step-icon i{ font-size:32px; }
+  .navbar-logo{ height: 68px; }
+}
+
+.footer .footer-logo{
+  height: 100px;         /* was ~60–80px */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+@media (max-width: 991.98px){
+  .footer .footer-logo{ height: 96px; }
+}
+
+/* Socials: one row on desktop, 2 per row on small screens */
+/* Socials: ALWAYS 2 per row (first 2 on line 1, next 2 on line 2) */
+.footer .footer-socials{
+  display: grid !important;
+  grid-template-columns: repeat(2, 56px);  /* two columns */
+  gap: 16px 18px;                          /* row gap, column gap */
+  justify-content: start;
+  align-content: start;
+}
+
+/* (optional) keep tiles and icons slightly larger */
+.footer .social-pill{
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+  padding: 0;
+}
+.footer .social-pill img{ width: 28px; height: 28px; object-fit: contain; }
+.footer .social-pill:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.45);
+  transform: translateY(-1px);
 }
 
 
-</style>
-{% endblock %}
-</head>
+@media (max-width: 576px){
+  .footer .footer-socials{
+    grid-template-columns: repeat(2, 52px); /* 2 logos per line on mobile */
+  }
+}
 
-<body>
+/* Larger, cleaner social tiles */
+.footer .social-pill{
+  width: 52px; height: 52px;               /* bigger tile */
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+  padding: 0;
+}
+.footer .social-pill:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.45);
+  transform: translateY(-1px);
+}
 
-{% block components %}{% endblock %}
+/* Bigger icons inside */
+.footer .social-pill img{
+  width: 28px; height: 28px; display: block; object-fit: contain;
+}
+.footer .social-pill.invert img{ filter: invert(1); }
 
-<div class="glass-nav">
-  <nav class="navbar navbar-expand-lg">
-    <div class="glass-nav-inner container-fluid px-3">
-      <a class="navbar-brand" href="{% url 'home' %}">
-        <div class="brand-stack">
-          <div class="logo-text"><span>Syn</span><span>Core</span></div>
-          <div class="logo-tagline">Synchronizing around the Core...</div>
-        </div>
-      </a>
 
-      <button class="navbar-toggler ms-auto" type="button"
-              data-bs-toggle="collapse" data-bs-target="#navbarNavGlass"
-              aria-controls="navbarNavGlass" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+/* Responsive logo sizing */
+@media (max-width: 991.98px) {
+  .navbar-logo {
+    height: 38px;
+  }
+}
 
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNavGlass">
-        <ul class="navbar-nav nav-menu">
-          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
-          <li class="nav-item"><a class="nav-link" href="#results">Testimonials</a></li>
-          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-          <li class="nav-item"><a class="nav-link" href="#industries">Industries</a></li>
-        </ul>
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
+}
+    </style>
+    {% endblock %}
+  </head>
 
-        <div class="ms-lg-4 mt-3 mt-lg-0">
-          <a href="{% url 'contact' %}" style="text-decoration: none;">
-            <button class="btn-contact-pill">Contact Us</button>
-          </a>
-        </div>
-      </div>
-    </div>
-  </nav>
-</div>
+  <body>
+    {% block components %}{% endblock %}
 
-{% block content %}
+    <div class="glass-nav">
+      <nav class="navbar navbar-expand-lg">
+        <div class="glass-nav-inner container-fluid px-3">
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <img src="{% static 'img/Logo.png' %}" alt="SynCore" class="navbar-logo">
+        </a>  
 
-<section class="hero-section hero-wrap" id="home">
-  {% if banner and banner.video %}
-    {% if banner_is_gif %}
-      <img src="{{ banner.video.url }}" alt="Hero" class="hero-media" loading="eager" decoding="async" />
-    {% elif banner_is_mp4 %}
-      <video class="hero-media" autoplay muted loop playsinline>
-        <source src="{{ banner.video.url }}" type="video/mp4">
-      </video>
-    {% else %}
-      <img src="{{ banner.video.url }}" alt="Hero" class="hero-media" loading="eager" decoding="async" />
-    {% endif %}
-  {% endif %}
+          <button
+            class="navbar-toggler ms-auto"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavGlass"
+            aria-controls="navbarNavGlass"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-  <div class="container-fluid hero-content">
-    <div class="hero-row">
-      <h1 class="hero-title">Transform Your<br/>Business with<br/>SynCore</h1>
-      <a href="{% url 'contact' %}" class="hero-cta">Start Your Journey <span class="btn-icon">→</span></a>
-    </div>
-  </div>
-</section>
+          <div
+            class="collapse navbar-collapse justify-content-center"
+            id="navbarNavGlass"
+          >
+            <ul class="navbar-nav nav-menu">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#results">Testimonials</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#industries">Industries</a>
+              </li>
+            </ul>
 
-<section id="metrics" class="py-5" style="background:var(--light-bg)">
-  <div class="container">
-    <div class="row g-4">
-      {% for m in metrics %}
-        <div class="col-lg-4">
-          <div class="stat-card h-100 text-center">
-            <div class="stat-number" data-target="{{ m.count|floatformat:0 }}" data-suffix="{{ m.get_unit_display }}">+0</div>
-            <div class="stat-label">{{ m.title }}</div>
+            <div class="ms-lg-4 mt-3 mt-lg-0">
+              <a href="{% url 'contact' %}" style="text-decoration: none">
+                <button class="btn-contact-pill">Contact Us</button>
+              </a>
+            </div>
           </div>
         </div>
-      {% empty %}
-        <p class="mb-0">No metrics yet.</p>
-      {% endfor %}
+      </nav>
     </div>
-  </div>
-</section>
 
-<section class="stats-services" id="services">
-  <div class="container">
-    <div class="row align-items-start g-4">
-      <div class="col-lg-7">
-        <div class="row g-3 row-cols-1 row-cols-md-2">
-          {% for s in services %}
-            <div class="col d-flex">
-              <div class="service-card w-100">
-                <div class="service-icon">
-                  {% if s.icon %}
-                    <img src="{{ s.icon.url }}" alt="{{ s.title }}" />
-                  {% elif s.icon_svg %}
-                    <span class="svg-wrap">{% autoescape off %}{{ s.icon_svg }}{% endautoescape %}</span>
-                  {% elif s.icon_class %}
-                    <i class="{{ s.icon_class }}" aria-hidden="true" title="{{ s.title }}"></i>
-                  {% else %}
-                    <span class="service-icon-fallback" aria-label="{{ s.title }}">{{ s.title|slice:":1"|upper }}</span>
-                  {% endif %}
-                </div>
-                <div class="flex-grow-1">
-                  <h5 class="service-title mb-1">{{ s.title }}</h5>
-                </div>
+    {% block content %}
+
+    <section class="hero-section hero-wrap" id="home">
+      {% if banner and banner.video %} {% if banner_is_gif %}
+      <img
+        src="{{ banner.video.url }}"
+        alt="Hero"
+        class="hero-media"
+        loading="eager"
+        decoding="async"
+      />
+      {% elif banner_is_mp4 %}
+      <video class="hero-media" autoplay muted loop playsinline>
+        <source src="{{ banner.video.url }}" type="video/mp4" />
+      </video>
+      {% else %}
+      <img
+        src="{{ banner.video.url }}"
+        alt="Hero"
+        class="hero-media"
+        loading="eager"
+        decoding="async"
+      />
+      {% endif %} {% endif %}
+
+      <div class="container-fluid hero-content">
+        <div class="hero-row">
+          <h1 class="hero-title">
+            Transform Your<br />Business with<br />SynCore
+          </h1>
+          <a href="{% url 'contact' %}" class="hero-cta"
+            >Start Your Journey <span class="btn-icon">→</span></a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section id="metrics" class="py-5" style="background: var(--light-bg)">
+      <div class="container">
+        <div class="row g-4">
+          {% for m in metrics %}
+          <div class="col-lg-4">
+            <div class="stat-card h-100 text-center">
+              <div
+                class="stat-number"
+                data-target="{{ m.count|floatformat:0 }}"
+                data-suffix="{{ m.get_unit_display }}"
+              >
+                +0
               </div>
+              <div class="stat-label">{{ m.title }}</div>
             </div>
+          </div>
           {% empty %}
-            <div class="col"><p class="mb-0">No services added yet.</p></div>
+          <p class="mb-0">No metrics yet.</p>
           {% endfor %}
         </div>
       </div>
+    </section>
 
-      <div class="col-lg-5">
-        <div class="right-side-image"
-             style="background-image:url('https://img.freepik.com/premium-photo/business-partnership-meeting-concept-businessmans-handshake-successful-businessmen-handshaking-after-good-deal-vertical-blurred-background_44344-4115.jpg?w=2000');">
+    <section class="stats-services" id="services">
+      <div class="container">
+        <div class="row align-items-start g-4">
+          <div class="col-lg-7">
+            <div class="row g-3 row-cols-1 row-cols-md-2">
+              {% for s in services %}
+              <div class="col d-flex">
+                <div class="service-card w-100">
+                  <div class="service-icon">
+                    {% if s.icon %}
+                    <img src="{{ s.icon.url }}" alt="{{ s.title }}" />
+                    {% elif s.icon_svg %}
+                    <span class="svg-wrap">{{ s.icon_svg|safe }}</span>
+                    {% elif s.icon_class %}
+                    <i
+                      class="{{ s.icon_class }}"
+                      aria-hidden="true"
+                      title="{{ s.title }}"
+                    ></i>
+                    {% else %}
+                    <span
+                      class="service-icon-fallback"
+                      aria-label="{{ s.title }}"
+                    >
+                      {{ s.title|slice:":1"|upper }}
+                    </span>
+                    {% endif %}
+                  </div>
+
+                  <div class="flex-grow-1">
+                    <h5 class="service-title mb-1">{{ s.title }}</h5>
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <div class="col"><p class="mb-0">No services added yet.</p></div>
+              {% endfor %}
+            </div>
+          </div>
+<div class="col-lg-5">
+  <div
+    class="right-side-image"
+    style="background-image: url('{% if banner and banner.service_image %}{{ banner.service_image.url }}{% else %}https://img.freepik.com/premium-photo/business-partnership-meeting-concept-businessmans-handshake-successful-businessmen-handshaking-after-good-deal-vertical-blurred-background_44344-4115.jpg?w=2000{% endif %}');"
+  ></div>
+</div>
+
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="industries-section" id="industries">
-  <div class="container">
-    <h2 class="section-title">Proven <em>Results</em> Across Industries</h2>
-  </div>
-</section>
+    <section class="industries-section" id="industries">
+      <div class="container">
+        <h2 class="section-title">Proven <em>Results</em> Across Industries</h2>
+      </div>
+    </section>
 
-<section id="results" class="pb-5">
-  <div class="container">
-    {% if results %}
-      <div class="vslider" id="resultsVSlider">
-        {% for r in results %}
+    <section id="results" class="pb-5">
+      <div class="container">
+        {% if results %}
+        <div class="vslider" id="resultsVSlider">
+          {% for r in results %}
           <div class="vslide {% if forloop.first %}active{% endif %}">
-            <img src="{{ r.image.url }}" alt="{{ r.title|default:'Result' }}">
+            <img src="{{ r.image.url }}" alt="{{ r.title|default:'Result' }}" />
             <div class="vcaption">
-              {% if r.title %}<h3>{{ r.title }}</h3>{% endif %}
+              {% if r.title %}
+              <h3>{{ r.title }}</h3>
+              {% endif %}
               <p class="mb-2">{{ r.description }}</p>
               {% if r.link %}
-                <a href="{{ r.link }}" target="_blank" rel="noopener" class="btn btn-light btn-sm">
-                  {{ r.link_text|default:"Read more" }} →
-                </a>
+              <a
+                href="{{ r.link }}"
+                target="_blank"
+                rel="noopener"
+                class="btn btn-light btn-sm"
+              >
+                {{ r.link_text|default:"Read more" }} →
+              </a>
               {% endif %}
             </div>
           </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
+        {% else %}
+        <p>No proven results yet.</p>
+        {% endif %}
       </div>
-    {% else %}
-      <p>No proven results yet.</p>
-    {% endif %}
-  </div>
-</section>
+    </section>
 
-<section class="about-section" id="about">
-  <div class="container">
-    <h2 class="about-title">
-      {% if approach %}
-        {{ approach.heading|linebreaksbr }}
-      {% else %}
-        At Syncore Consulting, we believe that strategy<br/>
-        should do more than sit on paper — it should drive<br/>
-        measurable change.
-      {% endif %}
-    </h2>
+    <section class="about-section" id="about">
+      <div class="container">
+        <h2 class="about-title">
+          {% if approach %} {{ approach.heading|linebreaksbr }} {% else %} At
+          Syncore Consulting, we believe that strategy<br />
+          should do more than sit on paper — it should drive<br />
+          measurable change. {% endif %}
+        </h2>
 
-    <div class="row g-4 about-grid">
-      <div class="col-lg-6 about-left">
-        <div class="about-image-sticky">
-          <div class="about-image"
-               style="background-image:url('{% if approach and approach.image %}{{ approach.image.url }}{% else %}https://tse4.mm.bing.net/th/id/OIP.mrBjykZHJ1UcZXW3ybUZ_AHaE7?w=2000&h=1333&rs=1&pid=ImgDetMain&o=7&rm=3{% endif %}');">
+        <div class="row g-4 about-grid">
+          <div class="col-lg-6 about-left">
+            <div class="about-image-sticky">
+              <div
+                class="about-image"
+                style="background-image:url('{% if approach and approach.image %}{{ approach.image.url }}{% else %}https://tse4.mm.bing.net/th/id/OIP.mrBjykZHJ1UcZXW3ybUZ_AHaE7?w=2000&h=1333&rs=1&pid=ImgDetMain&o=7&rm=3{% endif %}');"
+              ></div>
+            </div>
           </div>
+
+<div class="col-lg-6 stack-steps">
+  {% if approach %}
+    {% for step in approach.steps.all %}
+  <div class="step-card" style="z-index:{{ forloop.counter|add:'10' }}">
+        <div class="step-head">
+          <div class="step-icon">
+            {% if step.icon %}
+              <img src="{{ step.icon.url }}" alt="{{ step.title }}">
+            {% elif step.icon_svg %}
+              <span class="svg-wrap">{{ step.icon_svg|safe }}</span>
+            {% elif step.icon_class %}
+              <i class="{{ step.icon_class }}" aria-hidden="true" title="{{ step.title }}"></i>
+            {% else %}
+              <span class="service-icon-fallback" aria-label="{{ step.title }}">
+                {{ step.title|slice:":1"|upper }}
+              </span>
+            {% endif %}
+          </div>
+          <h4 class="step-title">{{ step.title }}</h4>
+        </div>
+        <div class="step-body">
+          <p>{{ step.body }}</p>
+          {% if step.body_secondary %}
+            <p class="mb-0">{{ step.body_secondary }}</p>
+          {% endif %}
         </div>
       </div>
-
-      <div class="col-lg-6 stack-steps">
-        {% if approach and approach.steps.all %}
-          {% for step in approach.steps.all %}
-         <div class="step-card" style="z-index:{{ forloop.revcounter|add:'10' }}">
-              <div class="step-head">
-<div class="step-icon">
-  {% if step.icon %}
-    <img src="{{ step.icon.url }}" alt="{{ step.title }}">
-  {% elif step.icon_svg %}
-    <span class="svg-wrap">{% autoescape off %}{{ step.icon_svg }}{% endautoescape %}</span>
-  {% elif step.icon_class %}
-    <i class="{{ step.icon_class }}" aria-hidden="true" title="{{ step.title }}"></i>
+    {% empty %}
+      <!-- Fallback when there are zero steps -->
+      <div class="step-card" style="z-index:40">
+        <div class="step-head">
+          <div class="step-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M9.7 17h4.6M12 3v1M21 12h-1M4 12H3M6.3 6.3l-.7-.7m12.1.7l-.7.7M8.1 14.5a5 5 0 117.8 0c-.6.6-1 .1-1 2.6V19a2 2 0 11-4 0v-.9c0-2.5-.4-2-1-2.6Z"
+                    stroke="#2d4dd9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h4 class="step-title">Understand</h4>
+        </div>
+        <div class="step-body">
+          <p>We immerse ourselves in your business to uncover challenges and opportunities.</p>
+          <p class="mb-0">Stakeholder interviews, data discovery, and quick-diagnostic workshops set the baseline.</p>
+        </div>
+      </div>
+    {% endfor %}
   {% else %}
-    <span class="service-icon-fallback" aria-label="{{ step.title }}">
-      {{ step.title|slice:":1"|upper }}
-    </span>
+    <!-- Fallback when no approach object -->
+    <div class="step-card" style="z-index:40">
+      <div class="step-head">
+        <div class="step-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M9.7 17h4.6M12 3v1M21 12h-1M4 12H3M6.3 6.3l-.7-.7m12.1.7l-.7.7M8.1 14.5a5 5 0 117.8 0c-.6.6-1 .1-1 2.6V19a2 2 0 11-4 0v-.9c0-2.5-.4-2-1-2.6Z"
+                  stroke="#2d4dd9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h4 class="step-title">Understand</h4>
+      </div>
+      <div class="step-body">
+        <p>We immerse ourselves in your business to uncover challenges and opportunities.</p>
+        <p class="mb-0">Stakeholder interviews, data discovery, and quick-diagnostic workshops set the baseline.</p>
+      </div>
+    </div>
   {% endif %}
 </div>
 
-                <h4 class="step-title">{{ step.title }}</h4>
-              </div>
-
-              <div class="step-body">
-                <p>{{ step.body }}</p>
-                {% if step.body_secondary %}
-                  <p class="mb-0">{{ step.body_secondary }}</p>
-                {% endif %}
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          {# Fallback static (optional) #}
-          <div class="step-card" style="z-index:40">
-            <div class="step-head">
-              <div class="step-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                  <path d="M9.7 17h4.6M12 3v1M21 12h-1M4 12H3M6.3 6.3l-.7-.7m12.1.7l-.7.7M8.1 14.5a5 5 0 117.8 0c-.6.6-1 .1-1 2.6V19a2 2 0 11-4 0v-.9c0-2.5-.4-2-1-2.6Z" stroke="#2d4dd9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <h4 class="step-title">Understand</h4>
-            </div>
-            <div class="step-body">
-              <p>We immerse ourselves in your business to uncover challenges and opportunities.</p>
-              <p class="mb-0">Stakeholder interviews, data discovery, and quick-diagnostic workshops set the baseline.</p>
-            </div>
-          </div>
-        {% endif %}
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-
-<!-- <section class="about-section" id="about">
+    <!-- <section class="about-section" id="about">
   <div class="container">
     <h2 class="about-title">
       At Syncore Consulting, we believe that strategy<br/>
@@ -549,262 +1446,460 @@ p{ text-align:justify; } /* justify all paragraph text */
   </div>
 </section> -->
 
-<!-- TEAM (equal heights) -->
-<section class="team-section">
-  <div class="container">
-    <div class="row g-4 team-equal align-items-stretch">
-      <div class="col-lg-6 d-flex">
-        <div class="team-content-card flex-grow-1">
-          <h2 class="mb-2"><em>Transforming</em> Strategy into <em>Results</em></h2>
-          <p class="mb-3">Our team brings together expertise in strategy, operations, finance, and digital transformation, with one shared mission: to simplify complexity and deliver results that last. Whether it’s entering new markets, streamlining processes, or guiding organizational change, we focus on creating solutions that are practical, actionable, and aligned with your goals.</p>
-          <a href="#" class="hero-cta">Meet Our Team <span class="btn-icon">→</span></a>
+    <!-- TEAM (equal heights) -->
+    <!-- this should be dynamic -->
+    <!-- <section class="team-section">
+      <div class="container">
+        <div class="row g-4 team-equal align-items-stretch">
+          <div class="col-lg-6 d-flex">
+            <div class="team-content-card flex-grow-1">
+              <h2 class="mb-2">
+                <em>Transforming</em> Strategy into <em>Results</em>
+              </h2>
+              <p class="mb-3">
+                Our team brings together expertise in strategy, operations,
+                finance, and digital transformation, with one shared mission: to
+                simplify complexity and deliver results that last. Whether it’s
+                entering new markets, streamlining processes, or guiding
+                organizational change, we focus on creating solutions that are
+                practical, actionable, and aligned with your goals.
+              </p>
+              <a href="#" class="hero-cta"
+                >Meet Our Team <span class="btn-icon">→</span></a
+              >
+            </div>
+          </div>
+          <div class="col-lg-6 d-flex">
+            <div class="media-box rounded-4 shadow-lg w-100">
+              <img
+                src="https://tse2.mm.bing.net/th/id/OIP.2YnFRDT3m6dzAzhMTrDONgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
+                alt="Discussion"
+                class="w-100 h-100 object-cover"
+              />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-lg-6 d-flex">
-        <div class="media-box rounded-4 shadow-lg w-100">
-          <img src="https://tse2.mm.bing.net/th/id/OIP.2YnFRDT3m6dzAzhMTrDONgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
-               alt="Discussion" class="w-100 h-100 object-cover">
+    </section> -->
+
+    <section class="team-section" id="transform">
+      <div class="container">
+        <div class="row g-4 team-equal align-items-stretch">
+          <!-- Left: Text -->
+          <div class="col-lg-6 d-flex">
+            <div class="team-content-card flex-grow-1">
+              {% if transform %}
+              <!-- Allow mild formatting in heading if you add <em>...</em> in admin -->
+              <h2 class="mb-2">{{ transform.heading|safe }}</h2>
+
+              <!-- Keep paragraphs nicely spaced; supports newlines -->
+              <p class="mb-3">{{ transform.body_text|linebreaksbr }}</p>
+
+              {% if transform.link and transform.button_text %}
+              <a href="{{ transform.link }}" class="hero-cta">
+                {{ transform.button_text }} <span class="btn-icon">→</span>
+              </a>
+              {% elif transform.button_text %}
+              <a href="#" class="hero-cta">
+                {{ transform.button_text }} <span class="btn-icon">→</span>
+              </a>
+
+              {% endif %} {% else %}
+              <h2 class="mb-2">
+                <em>Transforming</em> Strategy into <em>Results</em>
+              </h2>
+              <p class="mb-3">
+                Our team brings together expertise in strategy, operations,
+                finance, and digital transformation, with one shared mission: to
+                simplify complexity and deliver results that last. Whether it’s
+                entering new markets, streamlining processes, or guiding
+                organizational change, we focus on creating solutions that are
+                practical, actionable, and aligned with your goals.
+              </p>
+              <a href="#" class="hero-cta"
+                >Meet Our Team <span class="btn-icon">→</span></a
+              >
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-lg-6 d-flex">
+            <div class="media-box rounded-4 shadow-lg w-100">
+              {% if transform and transform.image %}
+              <img
+                src="{{ transform.image.url }}"
+                alt="{{ transform.heading }}"
+                class="w-100 h-100 object-cover"
+              />
+              {% else %}
+              <img
+                src="https://tse2.mm.bing.net/th/id/OIP.2YnFRDT3m6dzAzhMTrDONgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
+                alt="Discussion"
+                class="w-100 h-100 object-cover"
+              />
+              {% endif %}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- TRUSTED BY -->
+    <section class="logos-section" id="trustedby">
+      <div class="container">
+        <h2 class="section-title" style="margin-top: 1rem">Trusted By</h2>
+
+        <div class="logos-marquee">
+          <div class="logos-marquee-row">
+            <div
+              class="marquee-track rtl"
+              id="logosTrackTop"
+              style="--dur: 28s"
+            >
+              {% for l in logos_top %}
+              <div class="logo-card">
+                <img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}" />
+              </div>
+              {% endfor %} {% for l in logos_top %}
+              <div class="logo-card">
+                <img
+                  src="{{ l.logo.url }}"
+                  alt="Logo clone {{ forloop.counter }}"
+                />
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="logos-marquee-row">
+            <div
+              class="marquee-track ltr"
+              id="logosTrackBottom"
+              style="--dur: 34s"
+            >
+              {% for l in logos_bottom %}
+              <div class="logo-card">
+                <img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}" />
+              </div>
+              {% endfor %} {% for l in logos_bottom %}
+              <div class="logo-card">
+                <img
+                  src="{{ l.logo.url }}"
+                  alt="Logo clone {{ forloop.counter }}"
+                />
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+      <div class="container">
+        <div class="row g-4 footer-row">
+          <!-- LEFT column (brand) -->
+          <div class="col-lg-4">
+            <div class="brand-box">
+<a class="navbar-brand d-inline-block mb-2" href="{% url 'home' %}">
+  <img src="{% static 'img/Logo.png' %}" alt="SynCore" class="footer-logo">
+</a>
+
+              <p class="lead-copy">
+                Syncore Consulting helps businesses streamline operations,
+                optimize performance, and achieve measurable growth.
+              </p>
+
+              <a
+                href="mailto:{% if contact %}{{ contact.email }}{% endif %}"
+                class="btn-contact-nav"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6">
+            <h5 class="mb-3">Menu</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a
+                  class="text-white-50 text-decoration-none"
+                  href="{% url 'home' %}"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-white-50 text-decoration-none"
+                  href="{% url 'about' %}"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a class="text-white-50 text-decoration-none" href="#results"
+                  >Testimonials</a
+                >
+              </li>
+              <li>
+                <a class="text-white-50 text-decoration-none" href="#services"
+                  >Services</a
+                >
+              </li>
+              <li>
+                <a class="text-white-50 text-decoration-none" href="#services"
+                  >Industries</a
+                >
+              </li>
+            </ul>
+          </div>
+<div class="col-lg-3 col-md-6">
+  <h5 class="mb-3">Socials</h5>
+  
+  <div class="footer-socials mt-3">
+    <a href="https://instagram.com" class="social-pill" target="_blank" rel="noopener" aria-label="Instagram">
+      <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Instagram">
+    </a>
+
+    <a href="https://facebook.com" class="social-pill" target="_blank" rel="noopener" aria-label="Facebook">
+      <img src="https://www.google.com/s2/favicons?sz=64&domain=facebook.com" alt="Facebook">
+    </a>
+
+    <a href="https://linkedin.com" class="social-pill" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <img src="https://www.google.com/s2/favicons?sz=64&domain=linkedin.com" alt="LinkedIn">
+    </a>
+
+    <a href="https://x.com" class="social-pill" target="_blank" rel="noopener" aria-label="X (Twitter)">
+      <img src="https://www.google.com/s2/favicons?sz=64&domain=x.com" alt="X (Twitter)">
+    </a>
   </div>
-</section>
+</div>
 
-<!-- TRUSTED BY -->
-<section class="logos-section" id="trustedby">
-  <div class="container">
-    <h2 class="section-title" style="margin-top:1rem;">Trusted By</h2>
 
-    <div class="logos-marquee">
-      <div class="logos-marquee-row">
-        <div class="marquee-track rtl" id="logosTrackTop" style="--dur: 28s">
-          {% for l in logos_top %}
-            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}"/></div>
-          {% endfor %}
-          {% for l in logos_top %}
-            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo clone {{ forloop.counter }}"/></div>
-          {% endfor %}
+
+
+
+
+          <div class="col-lg-3 col-md-6">
+            <h5 class="mb-3">Contact</h5>
+            {% if contact %} {% if contact.phone_number %}
+            <div class="mb-2">+91 {{ contact.phone_number }}</div>
+            {% endif %} {% if contact.email %}
+            <div class="mb-2">{{ contact.email }}</div>
+            {% endif %} {% if contact.name %}
+            <div class="mb-2">{{ contact.name }}</div>
+            {% endif %} {% else %}
+            <div class="mb-2">—</div>
+            {% endif %}
+          </div>
         </div>
       </div>
+    </footer>
 
-      <div class="logos-marquee-row">
-        <div class="marquee-track ltr" id="logosTrackBottom" style="--dur: 34s">
-          {% for l in logos_bottom %}
-            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo {{ forloop.counter }}"/></div>
-          {% endfor %}
-          {% for l in logos_bottom %}
-            <div class="logo-card"><img src="{{ l.logo.url }}" alt="Logo clone {{ forloop.counter }}"/></div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    {% block page_js %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-{% endblock %}
+    <script>
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const href = a.getAttribute("href");
+          if (!href || href === "#") return;
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
 
-<!-- FOOTER -->
-<footer class="footer" id="contact">
-  <div class="container">
-    <div class="row g-4 footer-row">
-      <!-- LEFT column (brand) -->
-      <div class="col-lg-4">
-        <div class="brand-box">
-          <a class="navbar-brand d-inline-block mb-2" href="{% url 'home' %}">
-            <div class="logo-text"><span>Syn</span><span>Core</span></div>
-            <div class="logo-tagline">Synchronizing around the Core...</div>
-          </a>
+      // Elevate navbar on scroll
+      window.addEventListener("scroll", () => {
+        const bar = document.querySelector(".navbar");
+        bar.style.boxShadow =
+          window.scrollY > 50
+            ? "0 4px 30px rgba(0,0,0,.1)"
+            : "0 2px 20px rgba(0,0,0,.05)";
+      });
 
-          <p class="lead-copy">
-            Syncore Consulting helps businesses streamline operations, optimize performance,
-            and achieve measurable growth.
-          </p>
+      // Metrics count-up (+ prefix)
+      (function () {
+        const els = [...document.querySelectorAll(".stat-number")];
+        if (!els.length) return;
+        const animate = (el) => {
+          const end = Number(el.dataset.target || 0);
+          const suffix = (el.dataset.suffix || "").trim();
+          const start = 0;
+          const dur = 1200;
+          const t0 = performance.now();
+          function tick(now) {
+            const p = Math.min((now - t0) / dur, 1);
+            const val = Math.floor(start + (end - start) * p);
+            el.textContent = `+${val}${suffix}`;
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        };
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                animate(e.target);
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.3 }
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
 
-          <a href="mailto:{% if contact %}{{ contact.email }}{% endif %}" class="btn-contact-nav">
-            Contact Us
-          </a>
-        </div>
-      </div>
+    <script>
+      // Results vertical slider (release page scroll at edges)
+      (function () {
+        const slider = document.getElementById("resultsVSlider");
+        if (!slider) return;
+        const slides = Array.from(slider.querySelectorAll(".vslide"));
+        let i = 0,
+          busy = false,
+          timer = null;
 
-      <div class="col-lg-2 col-md-6">
-        <h5 class="mb-3">Menu</h5>
-        <ul class="list-unstyled">
-          <li><a class="text-white-50 text-decoration-none" href="{% url 'home' %}">Home</a></li>
-          <li><a class="text-white-50 text-decoration-none" href="{% url 'about' %}">About Us</a></li>
-          <li><a class="text-white-50 text-decoration-none" href="#results">Proven Results</a></li>
-          <li><a class="text-white-50 text-decoration-none" href="#services">Services</a></li>
-        </ul>
-      </div>
+        function resetClasses() {
+          slides.forEach((s) =>
+            s.classList.remove("active", "exit-up", "exit-down", "from-top")
+          );
+        }
+        function setZ(current, incoming) {
+          slides.forEach((s) => (s.style.zIndex = 0));
+          if (current) current.style.zIndex = 2;
+          if (incoming) incoming.style.zIndex = 3;
+        }
+        function go(to, dir) {
+          if (busy || to === i) return;
+          busy = true;
+          const current = slides[i];
+          const incoming = slides[to];
+          resetClasses();
+          setZ(current, incoming);
+          if (dir === "down") {
+            incoming.classList.add("from-top");
+          }
+          void incoming.offsetHeight;
+          current.classList.add(dir === "up" ? "exit-up" : "exit-down");
+          incoming.classList.add("active");
+          setTimeout(() => {
+            i = to;
+            busy = false;
+          }, 650);
+        }
+        function next() {
+          go((i + 1) % slides.length, "up");
+        }
+        function prev() {
+          go((i - 1 + slides.length) % slides.length, "down");
+        }
 
-      <div class="col-lg-3 col-md-6">
-        <h5 class="mb-3">Socials</h5>
-        <ul class="list-unstyled">
-          <li><a class="text-white-50 text-decoration-none" href="#">Instagram</a></li>
-          <li><a class="text-white-50 text-decoration-none" href="#">Facebook</a></li>
-          <li><a class="text-white-50 text-decoration-none" href="#">LinkedIn</a></li>
-          <li><a class="text-white-50 text-decoration-none" href="#">Twitter (X)</a></li>
-        </ul>
-      </div>
+        function start() {
+          timer = setInterval(next, 5000);
+        }
+        function stop() {
+          if (timer) clearInterval(timer);
+        }
+        start();
+        slider.addEventListener("mouseenter", stop);
+        slider.addEventListener("mouseleave", start);
 
-      <div class="col-lg-3 col-md-6">
-        <h5 class="mb-3">Contact</h5>
-        {% if contact %}
-          {% if contact.phone_number %}<div class="mb-2">+91 {{ contact.phone_number }}</div>{% endif %}
-          {% if contact.email %}<div class="mb-2">{{ contact.email }}</div>{% endif %}
-          {% if contact.name %}<div class="mb-2">{{ contact.name }}</div>{% endif %}
-        {% else %}
-          <div class="mb-2">—</div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</footer>
+        slider.addEventListener(
+          "wheel",
+          (e) => {
+            const atFirst = i === 0;
+            const atLast = i === slides.length - 1;
+            const goingDown = e.deltaY > 0;
+            const goingUp = e.deltaY < 0;
 
-{% block page_js %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            // Intercept only if we can move inside the slider
+            if ((goingDown && !atLast) || (goingUp && !atFirst)) {
+              e.preventDefault();
+              goingDown ? next() : prev();
+            }
+            // else: allow page to scroll naturally
+          },
+          { passive: false }
+        );
 
-<script>
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    const href=a.getAttribute('href'); if(!href||href==="#") return;
-    const target=document.querySelector(href); if(!target) return;
-    e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'});
-  });
-});
+        // Touch swipe (no preventDefault so page can continue past edges)
+        let touchY = null;
+        slider.addEventListener(
+          "touchstart",
+          (e) => (touchY = e.touches[0].clientY),
+          { passive: true }
+        );
+        slider.addEventListener("touchend", (e) => {
+          if (touchY == null) return;
+          const dy = e.changedTouches[0].clientY - touchY;
+          if (Math.abs(dy) > 30) {
+            dy < 0 ? next() : prev();
+          }
+          touchY = null;
+        });
+      })();
+    </script>
 
-// Elevate navbar on scroll
-window.addEventListener('scroll',()=>{
-  const bar=document.querySelector('.navbar');
-  bar.style.boxShadow = window.scrollY>50 ? '0 4px 30px rgba(0,0,0,.1)' : '0 2px 20px rgba(0,0,0,.05)';
-});
+    <script>
+      // Match team image box height to text card for perfect alignment
+      function matchTeamHeights() {
+        const card = document.querySelector("#transform .team-content-card");
+        const box = document.querySelector("#transform .media-box");
+        if (!card || !box) return;
 
-// Metrics count-up (+ prefix)
-(function () {
-  const els=[...document.querySelectorAll('.stat-number')];
-  if(!els.length) return;
-  const animate=(el)=>{
-    const end=Number(el.dataset.target||0);
-    const suffix=(el.dataset.suffix||'').trim();
-    const start=0; const dur=1200; const t0=performance.now();
-    function tick(now){
-      const p=Math.min((now-t0)/dur,1);
-      const val=Math.floor(start + (end-start)*p);
-      el.textContent = `+${val}${suffix}`;
-      if(p<1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  };
-  const io=new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); }
-    });
-  },{threshold:0.3});
-  els.forEach(el=>io.observe(el));
-})();
-</script>
+        if (window.innerWidth >= 992) {
+          box.style.height = card.offsetHeight + "px"; // key change
+        } else {
+          box.style.height = "auto";
+        }
+      }
 
-<script>
-// Results vertical slider (release page scroll at edges)
-(function() {
-  const slider = document.getElementById('resultsVSlider');
-  if (!slider) return;
-  const slides = Array.from(slider.querySelectorAll('.vslide'));
-  let i = 0, busy = false, timer = null;
+      window.addEventListener("load", matchTeamHeights);
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__mh);
+        window.__mh = setTimeout(matchTeamHeights, 120);
+      });
 
-  function resetClasses(){ slides.forEach(s => s.classList.remove('active','exit-up','exit-down','from-top')); }
-  function setZ(current, incoming){
-    slides.forEach(s => s.style.zIndex = 0);
-    if (current)  current.style.zIndex  = 2;
-    if (incoming) incoming.style.zIndex = 3;
-  }
-  function go(to, dir){
-    if (busy || to === i) return; busy = true;
-    const current = slides[i]; const incoming = slides[to];
-    resetClasses(); setZ(current, incoming);
-    if (dir === 'down'){ incoming.classList.add('from-top'); }
-    void incoming.offsetHeight;
-    current.classList.add(dir === 'up' ? 'exit-up' : 'exit-down');
-    incoming.classList.add('active');
-    setTimeout(()=>{ i = to; busy = false; }, 650);
-  }
-  function next(){ go((i+1)%slides.length, 'up'); }
-  function prev(){ go((i-1+slides.length)%slides.length, 'down'); }
+      // Sync heights for sticky image/steps
+      function syncAboutHeights() {
+        const leftCol = document.querySelector(".about-left");
+        const steps = document.querySelector(".stack-steps");
+        if (!leftCol || !steps) return;
+        leftCol.style.minHeight = steps.scrollHeight + "px";
+      }
+      window.addEventListener("load", syncAboutHeights);
+      window.addEventListener("resize", () => {
+        clearTimeout(window.__aboutSync);
+        window.__aboutSync = setTimeout(syncAboutHeights, 150);
+      });
 
-  function start(){ timer = setInterval(next, 5000); }
-  function stop(){ if (timer) clearInterval(timer); }
-  start();
-  slider.addEventListener('mouseenter', stop);
-  slider.addEventListener('mouseleave', start);
+      // Marquee tuning (two rows)
+      (function tuneRow(trackId) {
+        const track = document.getElementById(trackId);
+        if (!track) return;
+        const total = track.children.length;
+        const unique = Math.max(1, Math.floor(total / 2));
+        const seconds = Math.min(45, Math.max(18, unique * 0.9));
+        track.style.animationDuration = seconds + "s";
+      })("logosTrackTop");
 
-  slider.addEventListener('wheel', (e) => {
-    const atFirst = (i === 0);
-    const atLast  = (i === slides.length - 1);
-    const goingDown = e.deltaY > 0;
-    const goingUp   = e.deltaY < 0;
-
-    // Intercept only if we can move inside the slider
-    if ((goingDown && !atLast) || (goingUp && !atFirst)) {
-      e.preventDefault();
-      goingDown ? next() : prev();
-    }
-    // else: allow page to scroll naturally
-  }, { passive: false });
-
-  // Touch swipe (no preventDefault so page can continue past edges)
-  let touchY = null;
-  slider.addEventListener('touchstart', e => touchY = e.touches[0].clientY, {passive:true});
-  slider.addEventListener('touchend', e => {
-    if (touchY == null) return;
-    const dy = (e.changedTouches[0].clientY - touchY);
-    if (Math.abs(dy) > 30) { dy < 0 ? next() : prev(); }
-    touchY = null;
-  });
-})();
-</script>
-
-<script>
-// Match team image box height to text card for perfect alignment
-function matchTeamHeights(){
-  const card = document.querySelector('.team-content-card');
-  const box  = document.querySelector('.media-box');
-  if(card && box){ box.style.minHeight = card.offsetHeight + 'px'; }
-}
-window.addEventListener('load', matchTeamHeights);
-window.addEventListener('resize', () => {
-  clearTimeout(window.__mh); window.__mh = setTimeout(matchTeamHeights, 120);
-});
-
-// Sync heights for sticky image/steps
-function syncAboutHeights() {
-  const leftCol = document.querySelector('.about-left');
-  const steps = document.querySelector('.stack-steps');
-  if (!leftCol || !steps) return;
-  leftCol.style.minHeight = steps.scrollHeight + 'px';
-}
-window.addEventListener('load', syncAboutHeights);
-window.addEventListener('resize', () => { clearTimeout(window.__aboutSync); window.__aboutSync = setTimeout(syncAboutHeights, 150); });
-
-// Marquee tuning (two rows)
-(function tuneRow(trackId){
-  const track = document.getElementById(trackId);
-  if(!track) return;
-  const total = track.children.length;
-  const unique = Math.max(1, Math.floor(total / 2));
-  const seconds = Math.min(45, Math.max(18, unique * 0.9));
-  track.style.animationDuration = seconds + 's';
-})('logosTrackTop');
-
-(function tuneRow(trackId){
-  const track = document.getElementById(trackId);
-  if(!track) return;
-  const total = track.children.length;
-  const unique = Math.max(1, Math.floor(total / 2));
-  const seconds = Math.min(48, Math.max(20, unique * 1.0));
-  track.style.animationDuration = seconds + 's';
-})('logosTrackBottom');
-</script>
-{% endblock %}
-
-</body>
+      (function tuneRow(trackId) {
+        const track = document.getElementById(trackId);
+        if (!track) return;
+        const total = track.children.length;
+        const unique = Math.max(1, Math.floor(total / 2));
+        const seconds = Math.min(48, Math.max(20, unique * 1.0));
+        track.style.animationDuration = seconds + "s";
+      })("logosTrackBottom");
+    </script>
+    {% endblock %}
+  </body>
 </html>

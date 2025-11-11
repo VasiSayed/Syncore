@@ -18,7 +18,7 @@ from .models import (
     ProvenResult,
     TrustedBy,
     ContactInfo,
-    ApproachSection,FaceCompany,AboutUsStatic
+    ApproachSection,FaceCompany,AboutUsStatic,Transform,SocialMedia
     
     )
 
@@ -35,7 +35,6 @@ def home(request):
     logos_top = logos_all[:half]
     logos_bottom = logos_all[half:]
 
-    # NEW: active Approach section + steps
     approach = (
         ApproachSection.objects.filter(is_active=True)
         .prefetch_related("steps")
@@ -56,9 +55,9 @@ def home(request):
         "logos_bottom": logos_bottom,
 
         "contact": ContactInfo.objects.first(),
-
-        # pass to template
+        "transform": Transform.objects.filter(is_active=True).first(),
         "approach": approach,
+        "socials": SocialMedia.objects.all(),
     }
     return render(request, "core/home.html", ctx)
 
@@ -161,7 +160,7 @@ def contact_form_view(request):
     else:
         form = VisitorInfoForm()
 
-    return render(request, "core/contact_form.html", {"form": form, "contact": contact})
+    return render(request, "core/contact_form.html", {"form": form, "contact": ContactInfo.objects.first(),"socials": SocialMedia.objects.all(),})
 
 
 def about_page(request):
@@ -175,6 +174,8 @@ def about_page(request):
         "data": data,
         "founder": founder,
         "faces": team,    
+        "contact": ContactInfo.objects.first(),
+        "socials": SocialMedia.objects.all(),
     }
     return render(request, "core/about.html", context)
 
